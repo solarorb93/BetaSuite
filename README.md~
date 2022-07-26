@@ -94,10 +94,10 @@ This section is only for users with a modern NVidia graphics card.  If you do no
 * Unzip the zip file to InstallFolder/, so you should have a file InstallFolder/cuda/lib/x64/cudnn.lib
 * Hit WindowsKey+Pause/Break Key to bring up system settings.  On the right, click on Advanced System Settings.  Then in the window that pops up, click on the Environment Variables button.
 * In the window that pops up, in the top half, there is a list of Variables and Values.  There is a variable called Path.  Double-click on Path.  A window will pop up titled "Edit environment variable"
-    * Hit the "New" button and enter `InstallFolder/cuda/`, where InstallFolder is your InstallFolder
-    * Hit the "New" button and enter `InstallFolder/cuda/bin/`, where InstallFolder is your InstallFolder
-    * Hit the "New" button and enter `InstallFolder/cuda/include/`, where InstallFolder is your InstallFolder
-    * Hit the "New" button and enter `InstallFolder/cuda/lib/x64/`, where InstallFolder is your InstallFolder
+    * Hit the "New"button and enter `InstallFolder/cuda/`, where InstallFolder is your InstallFolder
+    * Hit the "New"button and enter `InstallFolder/cuda/bin/`, where InstallFolder is your InstallFolder
+    * Hit the "New"button and enter `InstallFolder/cuda/include/`, where InstallFolder is your InstallFolder
+    * Hit the "New"button and enter `InstallFolder/cuda/lib/x64/`, where InstallFolder is your InstallFolder
 * You should now have added four entries to your Path variable
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `pip uninstall onnxruntime`
