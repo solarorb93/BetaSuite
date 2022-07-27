@@ -63,9 +63,12 @@ def prep_img_for_nn( raw_img, size, scale ):
     adj_img -= [103.939, 116.779, 123.68 ]
     return( adj_img )
 
-def detect_raw_boxes( img_array, session, scale_array, t ):
-    all_raw_boxes = []
+def get_raw_model_output( img_array, session ):
     model_output = session.run( betaconst.model_outputs, {betaconst.model_input: img_array})
+    return( model_output )
+
+def raw_boxes_from_model_output( model_output, scale_array, t ):
+    all_raw_boxes = []
     all_boxes   = model_output[0]
     all_scores  = model_output[1]
     all_classes = model_output[2]
@@ -84,6 +87,10 @@ def detect_raw_boxes( img_array, session, scale_array, t ):
                 } )
         all_raw_boxes.append(raw_boxes)
     return( all_raw_boxes )
+
+def detect_raw_boxes( img_array, session, scale_array, t ):
+    model_output = get_raw_model_output( img_array, session )
+    return( raw_boxes_from_model_output( model_output, scale_array, t ) )
     
 def raw_boxes_for_img( img, size, session, t ):
     scale = get_image_resize_scale( img, size )
@@ -236,3 +243,17 @@ def video_file_has_audio( filepath ):
         return( True )
     else:
         return( False )
+
+def get_screenshot( sct ):
+    monitor = {
+            'left': betaconfig.vision_cap_left,
+            'top': betaconfig.vision_cap_top,
+            'width': betaconfig.vision_cap_width,
+            'height': betaconfig.vision_cap_height,
+            'mon': betaconfig.vision_cap_monitor,
+    }
+
+    sct_time = time.monotonic_ns()
+    sct_img = sct.grab( monitor )
+
+    return( sct_time, sct_img )

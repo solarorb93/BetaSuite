@@ -31,6 +31,22 @@ picture_sizes = [ 1280 ]
 #### best accuracy.
 video_censor_fps = 15
 
+##################################################################
+#### BetaVision works by capturing uncensored content from one
+#### part of your screen and displaying it censored on another
+#### part of your screen.  Here, configure what part of the screen
+#### holds the uncensored content.  
+vision_cap_monitor = 1
+vision_cap_top = 0
+vision_cap_left = 0
+vision_cap_height = 1440
+vision_cap_width = 1280
+
+#### how long a delay should be imposed on the censored content
+#### how low this can go depends on how quickly your system
+#### can detect and censor content.  
+vision_delay = 0.500 #seconds
+
 ###################################################################
 ###### censoring config
 ###### this section controls what is censored
