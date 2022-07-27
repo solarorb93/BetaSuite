@@ -154,7 +154,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 '-crf', '23',
                                 '-preset', 'veryfast',
                                 '-map', '0:0',
-                                '-map', '1:1',
+                                '-map', '1:a',
                                 '-shortest',
                                 censored_path
                         ]
