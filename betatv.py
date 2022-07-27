@@ -105,28 +105,11 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                             '-pix_fmt', 'bgr24',
                             '-r', '%.6f'%vid_fps,
                             '-i', '-',
-                    ]
-
-                    has_audio = betautils.video_file_has_audio( uncensored_path )
-
-                    if betautils.video_file_has_audio( uncensored_path ):
-                        command.extend( [
-                            '-i', uncensored_path,
-                            '-c:a', 'copy',
-                            '-c:v', 'mpeg4',
-                            '-qscale:v', '3',
-                            '-map', '0:0',
-                            '-map', '1:1',
-                            '-shortest',
-                            censored_avi
-                        ] )
-                    else:
-                        command.extend( [
                             '-an',
                             '-c:v', 'mpeg4',
                             '-qscale:v', '3',
                             censored_avi
-                        ] )
+                    ]
 
                     proc = sp.Popen(command, stdin=sp.PIPE )
 
@@ -156,18 +139,37 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                     proc.wait()
 
                     print( "encoding complete, re-encoding to final output.........." );
-                    command =  [ '../ffmpeg/bin/ffmpeg.exe',
-                            '-y',
-                            '-hide_banner',
-                            '-loglevel', 'error',
-                            '-stats',
-                            '-i', censored_avi,
-                            '-c', 'copy',
-                            '-c:v', 'libx264',
-                            '-crf', '23',
-                            '-preset', 'veryfast',
-                            censored_path
-                    ]
+                    has_audio = betautils.video_file_has_audio( uncensored_path )
+
+                    if has_audio:
+                        command =  [ '../ffmpeg/bin/ffmpeg.exe',
+                                '-y',
+                                '-hide_banner',
+                                '-loglevel', 'error',
+                                '-stats',
+                                '-i', censored_avi,
+                                '-i', uncensored_path,
+                                '-c:a', 'copy',
+                                '-c:v', 'libx264',
+                                '-crf', '23',
+                                '-preset', 'veryfast',
+                                '-map', '0:0',
+                                '-map', '1:1',
+                                '-shortest',
+                                censored_path
+                        ]
+                    else:
+                        command =  [ '../ffmpeg/bin/ffmpeg.exe',
+                                '-y',
+                                '-hide_banner',
+                                '-loglevel', 'error',
+                                '-stats',
+                                '-i', censored_avi,
+                                '-c:v', 'libx264',
+                                '-crf', '23',
+                                '-preset', 'veryfast',
+                                censored_path
+                        ]
 
                     proc2 = sp.Popen( command ) 
                     proc2.wait()
