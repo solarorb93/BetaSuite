@@ -59,10 +59,10 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
 
                     all_raw_boxes = []
                     for size in betaconfig.picture_sizes:
-                        box_hash_path = '../vid_hashes/%s-%s-%d-%d-%.3f.txt'%(file_hash,betaconst.picture_saved_box_version, size, betaconfig.video_censor_fps, betaconst.global_min_prob)
+                        box_hash_path = '../vid_hashes/%s-%s-%d-%d-%.3f.gz'%(file_hash,betaconst.picture_saved_box_version, size, betaconfig.video_censor_fps, betaconst.global_min_prob)
 
                         if( os.path.exists( box_hash_path ) ):
-                            all_raw_boxes.append( json.load(open(box_hash_path)) )
+                            all_raw_boxes.append( betautils.read_json( box_hash_path ) )
                         else:
                             raw_boxes = []
                             cap.set( cv2.CAP_PROP_POS_FRAMES, 0 )
@@ -82,7 +82,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 t_pos = i / betaconfig.video_censor_fps
                                 cap.set( cv2.CAP_PROP_POS_FRAMES, math.floor( t_pos * vid_fps ) )
 
-                            json.dump( raw_boxes, open( box_hash_path, 'w' ) )
+                            betautils.write_json( raw_boxes, box_hash_path )
                             all_raw_boxes.append( raw_boxes )
                             print( "size %d: processing complete....................."%size )
 
@@ -105,28 +105,11 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                             '-pix_fmt', 'bgr24',
                             '-r', '%.6f'%vid_fps,
                             '-i', '-',
-                    ]
-
-                    has_audio = betautils.video_file_has_audio( uncensored_path )
-
-                    if betautils.video_file_has_audio( uncensored_path ):
-                        command.extend( [
-                            '-i', uncensored_path,
-                            '-c:a', 'copy',
-                            '-c:v', 'mpeg4',
-                            '-qscale:v', '3',
-                            '-map', '0:0',
-                            '-map', '1:1',
-                            '-shortest',
-                            censored_avi
-                        ] )
-                    else:
-                        command.extend( [
                             '-an',
                             '-c:v', 'mpeg4',
                             '-qscale:v', '3',
                             censored_avi
-                        ] )
+                    ]
 
                     proc = sp.Popen(command, stdin=sp.PIPE )
 
@@ -156,18 +139,39 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                     proc.wait()
 
                     print( "encoding complete, re-encoding to final output.........." );
-                    command =  [ '../ffmpeg/bin/ffmpeg.exe',
-                            '-y',
-                            '-hide_banner',
-                            '-loglevel', 'error',
-                            '-stats',
-                            '-i', censored_avi,
-                            '-c', 'copy',
-                            '-c:v', 'libx264',
-                            '-crf', '23',
-                            '-preset', 'veryfast',
-                            censored_path
-                    ]
+                    has_audio = betautils.video_file_has_audio( uncensored_path )
+
+                    if has_audio:
+                        command =  [ '../ffmpeg/bin/ffmpeg.exe',
+                                '-y',
+                                '-hide_banner',
+                                '-loglevel', 'error',
+                                '-stats',
+                                '-i', censored_avi,
+                                '-i', uncensored_path,
+                                '-c:a', 'copy',
+                                '-c:v', 'libx264',
+                                '-crf', '23',
+                                '-preset', 'veryfast',
+                                '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2',
+                                '-map', '0:0',
+                                '-map', '1:a',
+                                '-shortest',
+                                censored_path
+                        ]
+                    else:
+                        command =  [ '../ffmpeg/bin/ffmpeg.exe',
+                                '-y',
+                                '-hide_banner',
+                                '-loglevel', 'error',
+                                '-stats',
+                                '-i', censored_avi,
+                                '-c:v', 'libx264',
+                                '-crf', '23',
+                                '-preset', 'veryfast',
+                                '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2',
+                                censored_path
+                        ]
 
                     proc2 = sp.Popen( command ) 
                     proc2.wait()

@@ -7,6 +7,7 @@ import onnxruntime
 import cv2
 import math
 import subprocess
+import gzip
 
 def get_parts_to_blur():
     parts_to_blur={}
@@ -35,6 +36,14 @@ def get_censor_hash():
             }
     ptb_hash = dictionary_hash( hash_dict, betaconst.ptb_hash_len )
     return( ptb_hash )
+
+def write_json( variable, filename ):
+    with gzip.open( filename, 'wt', encoding='UTF-8' ) as fout:
+        json.dump( variable, fout )
+
+def read_json( filename ):
+    with gzip.open( filename, 'rt', encoding='UTF-8' ) as fin:
+        return( json.load( fin ) )
 
 def get_session():
     if betaconfig.gpu_enabled:
