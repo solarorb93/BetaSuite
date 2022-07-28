@@ -59,10 +59,10 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
 
                     all_raw_boxes = []
                     for size in betaconfig.picture_sizes:
-                        box_hash_path = '../vid_hashes/%s-%s-%d-%d-%.3f.txt'%(file_hash,betaconst.picture_saved_box_version, size, betaconfig.video_censor_fps, betaconst.global_min_prob)
+                        box_hash_path = '../vid_hashes/%s-%s-%d-%d-%.3f.gz'%(file_hash,betaconst.picture_saved_box_version, size, betaconfig.video_censor_fps, betaconst.global_min_prob)
 
                         if( os.path.exists( box_hash_path ) ):
-                            all_raw_boxes.append( json.load(open(box_hash_path)) )
+                            all_raw_boxes.append( betautils.read_json( box_hash_path ) )
                         else:
                             raw_boxes = []
                             cap.set( cv2.CAP_PROP_POS_FRAMES, 0 )
@@ -82,7 +82,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 t_pos = i / betaconfig.video_censor_fps
                                 cap.set( cv2.CAP_PROP_POS_FRAMES, math.floor( t_pos * vid_fps ) )
 
-                            json.dump( raw_boxes, open( box_hash_path, 'w' ) )
+                            betautils.write_json( raw_boxes, box_hash_path )
                             all_raw_boxes.append( raw_boxes )
                             print( "size %d: processing complete....................."%size )
 

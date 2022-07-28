@@ -54,16 +54,16 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
                 if( not os.path.exists( censored_path ) ):
                     all_raw_boxes = []
                     for size in betaconfig.picture_sizes:
-                        box_hash_path = '../pic_hashes/%s-%s-%d-%.3f.txt'%(image_hash,betaconst.picture_saved_box_version, size, betaconst.global_min_prob)
+                        box_hash_path = '../pic_hashes/%s-%s-%d-%.3f.gz'%(image_hash,betaconst.picture_saved_box_version, size, betaconst.global_min_prob)
 
                         if( os.path.exists( box_hash_path ) ):
-                            all_raw_boxes.append( json.load(open(box_hash_path)) )
+                            all_raw_boxes.append( betautils.read_json( box_hash_path ) )
                             use_nn = False
 
                         else:
                             raw_boxes = betautils.raw_boxes_for_img( image, size, session, 0 )
 
-                            json.dump( raw_boxes, open( box_hash_path, 'w' ) )
+                            betautils.write_json( raw_boxes, box_hash_path )
                             all_raw_boxes.append( raw_boxes )
                             use_nn = True
 
