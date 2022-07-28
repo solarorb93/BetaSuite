@@ -60,7 +60,7 @@ Yes, you really have to do all these things.
 
 4. Install ffmpeg
     * ffmpeg is used for manipulating video files. Builds for Windows are available here: https://ffmpeg.org/download.html#build-windows
-    * I recommend clicking on "Windows Builds by BtBN" and then downloading "ffmpeg-master-latest-win64-lgpl.zip".  
+    * I recommend clicking on "Windows Builds by BtBN" and then downloading "ffmpeg-master-latest-win64-gpl.zip".  
     * Whatever version you download, unzip it into InstallFolder/ffmpeg/.  So you should have, for example, InstallFolder/ffmpeg/bin/ffmpeg.exe.
 
 5. Download NudeNet neural net model
