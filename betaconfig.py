@@ -5,7 +5,7 @@
 #### If you have not, set this to 0.
 #### Only BetaStare and BetaTV are supported with gpu_enabled = 0, 
 #### BetaVision is only supported with gpu_enabled=1.
-gpu_enabled=1
+gpu_enabled=0
 
 ###################################################################
 #### Neural Net input size.  This controls how the net views the image.
@@ -29,7 +29,7 @@ picture_sizes = [ 1280 ]
 #### but you should probably increase the time_safety values
 #### in the censoring config if you do.  15 is what I use for
 #### best accuracy.
-video_censor_fps = 15
+video_censor_fps = 5
 
 ###################################################################
 ###### censoring config
