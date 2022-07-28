@@ -149,6 +149,14 @@ Navigate to InstallFolder/BetaSuite-0.1.1-rc2/ and open betaconfig.py in Notepad
 * After you've made changes to betaconfig, save and close the file.  Now you can rerun BetaStare.  BetaStare will re-censor the image with the new settings and place a new copy in InstallFolder/censored_pics/.  
 * If this is all working, you are ready to go.  You can copy as many images as you like into InstallFolder/uncensored_pics/ and run BetaStare and as many videos as you like into InstallFolder/uncensored_vids/ and run BetaTV.  Subfolders are supported.  Any files which are not images are skipped (for clarity, animated gifs are not images) in BetaStare and any files which are not videos are skipped in BetaTV.  BetaSuite will be as efficient as possible; if it has already scanned a file with a neural net, it will not do so again (the results are saved in InstallFolder/pic_hashes and vid_hashes).
 
+## Troubleshooting
+* If you are having problems getting GPU acceleration to work, especially if you are seeing an error message that includes "Invalid configuration argument", try reinstalling onnxruntime-gpu:
+    * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
+        * `pip uninstall onnxruntime-gpu`
+        * `pip install onnxruntime-gpu`
+* If your program appears "stuck" and is not printing anything in the cmd window, look at the top left of the command window title bar. If it says "Select", then click on the cmd window and press the Escape key.
+    * This is a 'feature' in newer versions of Windows.  When you click on a cmd window, it freezes whatever programs are running to allow you to copy text out of the window.  Pressing Escape exits this mode, allowing programs to keep running.
+
 ## Changelog
 * v0.1.1-rc2: 2022-07-27
     * Move audio to second encoding pass in betatv
