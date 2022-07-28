@@ -266,3 +266,6 @@ def get_screenshot( sct ):
     sct_img = sct.grab( monitor )
 
     return( sct_time, sct_img )
+
+def shm_name_for_screenshot( size ):
+    return( 'raw_grab_%d'%size )
