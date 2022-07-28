@@ -153,6 +153,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 '-c:v', 'libx264',
                                 '-crf', '23',
                                 '-preset', 'veryfast',
+                                '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2',
                                 '-map', '0:0',
                                 '-map', '1:a',
                                 '-shortest',
@@ -168,6 +169,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 '-c:v', 'libx264',
                                 '-crf', '23',
                                 '-preset', 'veryfast',
+                                '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2',
                                 censored_path
                         ]
 
