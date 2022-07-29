@@ -60,9 +60,9 @@ items_to_censor = [
     'exposed_breast',
     'exposed_buttocks',
     'covered_vulva',
-    #'covered_breast',
-    #'covered_buttocks',
-    #'face_femme',
+    'covered_breast',
+    'covered_buttocks',
+    'face_femme',
     #'exposed_belly',
     #'covered_belly',
     #'exposed_feet',
@@ -133,3 +133,6 @@ betavision_delay = 0.5 # seconds
 # setting this to true may make videos in BetaVision
 # smoother, but creates ghosting.
 betavision_interpolate = False
+
+### color for the replacement cursor for BetaVision
+vision_cursor_color = (253,93,168)

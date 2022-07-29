@@ -77,8 +77,17 @@ def prep_img_for_nn( raw_img, size, scale ):
     return( adj_img )
 
 def get_raw_model_output( img_array, session ):
-    model_output = session.run( betaconst.model_outputs, {betaconst.model_input: img_array})
-    return( model_output )
+    output = [
+            np.zeros( (len( img_array ), 300, 4 ), dtype = np.float32 ),
+            np.zeros( (len( img_array ), 300 ), dtype = np.float32 ),
+            np.zeros( (len( img_array ), 300 ), dtype = np.int32 ),
+    ]
+
+    #model_output = session.run( betaconst.model_outputs, {betaconst.model_input: img_array})
+    for i,img in enumerate( img_array ):
+        (output[0][i], output[1][i], output[2][i]) = session.run( betaconst.model_outputs, {betaconst.model_input: [img_array[i]]})
+
+    return( output )
 
 def raw_boxes_from_model_output( model_output, scale_array, t ):
     all_raw_boxes = []

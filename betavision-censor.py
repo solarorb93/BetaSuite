@@ -3,6 +3,7 @@ from multiprocessing import Process, Queue, shared_memory
 import time
 import cv2
 import numpy as np
+import win32gui, win32ui
 
 import betautils
 import betaconfig
@@ -84,6 +85,13 @@ while( True ):
 
     times.append(time.perf_counter())
     frame = betautils.censor_img_for_boxes( frame, live_boxes )
+
+    flags, hcursor, (cx,cy) = win32gui.GetCursorInfo()
+    cx = cx - betaconfig.vision_cap_left
+    cy = cy - betaconfig.vision_cap_top
+
+    if 5<cx<betaconfig.vision_cap_width and 5<cy<betaconfig.vision_cap_height:
+        frame[cy-5:cy+5,cx-5:cx+5] = betaconfig.vision_cursor_color
 
     times.append(time.perf_counter())
     cv2.imshow( window_name, frame )
