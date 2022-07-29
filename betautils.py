@@ -8,6 +8,7 @@ import cv2
 import math
 import subprocess
 import gzip
+import time
 
 def get_parts_to_blur():
     parts_to_blur={}
@@ -54,12 +55,15 @@ def get_session():
     session = onnxruntime.InferenceSession( '../model/detector_v2_default_checkpoint.onnx', providers=providers )
     return( session )
 
-def get_image_resize_scale( raw_img, max_length ):
+def get_resize_scale( img_h, img_w, max_length ):
     if max_length == 0:
         return(1)
+    else:
+        return( max_length/max(img_h,img_w) )
+
+def get_image_resize_scale( raw_img, max_length ):
     (s1, s2, _) = raw_img.shape
-    scale = max_length/max(s1,s2)
-    return( scale )
+    return( get_resize_scale( s1, s2, max_length ) )
 
 def prep_img_for_nn( raw_img, size, scale ):
     adj_img = cv2.resize( raw_img, None, fx=scale, fy=scale )
@@ -139,6 +143,7 @@ def blur_image( image, x, y, w, h, factor ):
     return( image )
 
 def bar_image( image, x, y, w, h, color ):
+    image = np.ascontiguousarray( image )
     image = cv2.rectangle( image, (x,y), (x+w,y+h), color, cv2.FILLED )
     return( image )
 
@@ -262,10 +267,22 @@ def get_screenshot( sct ):
             'mon': betaconfig.vision_cap_monitor,
     }
 
-    sct_time = time.monotonic_ns()
-    sct_img = sct.grab( monitor )
+    sct_time = time.monotonic()
+    sct_img = np.array( sct.grab( monitor ) )[:,:,:3]
 
-    return( sct_time, sct_img )
+    return( [ sct_time, sct_img ] )
 
 def shm_name_for_screenshot( size ):
     return( 'raw_grab_%d'%size )
+
+def interpolate_images( img1, ts1, img2, ts2, timestamp ):
+    assert( ts1 < ts2 )
+    if timestamp < ts1:
+        return( img1 )
+    if ts2 < timestamp:
+        return( img2 )
+
+    pct2 = (timestamp - ts1)/(ts2 - ts1)
+    pct1 = 1 - pct2
+
+    return( cv2.addWeighted( img1, pct1, img2, pct2, 0 ) )

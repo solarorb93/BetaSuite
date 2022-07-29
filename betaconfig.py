@@ -60,9 +60,9 @@ items_to_censor = [
     'exposed_breast',
     'exposed_buttocks',
     'covered_vulva',
-    'covered_breast',
+    #'covered_breast',
     #'covered_buttocks',
-    'face_femme',
+    #'face_femme',
     #'exposed_belly',
     #'covered_belly',
     #'exposed_feet',
@@ -76,9 +76,10 @@ items_to_censor = [
 # censor style: whether the default censor should be black bars, pixelate, or blur.  Uncomment
 # one of the below (by removing the #).
 # you can override these per item below in Item Overrides
-default_censor_style = [ 'bar', (192,154,247) ] # second item is the color of the bar, in BGR code (same as RGB, but backwards).
-#default_censor_style = [ 'blur', 20 ] # second item is how aggressive a blur.  20 is a reasonable number.  Higher is more blurry.
-#default_censor_style = [ 'pixel', 20 ] # second item is the how much to pixelate.  Higher is more censored.  10 means that a 200x400 pixel region is pixelated to 20x40 pixels.
+default_censor_style = [ 'bar', (0,0,0) ] # second item is the color of the bar, in BGR code (same as RGB, but backwards).
+#default_censor_style = [ 'bar', (192,154,247) ] # second item is the color of the bar, in BGR code (same as RGB, but backwards).
+#default_censor_style = [ 'blur', 50 ] # second item is how aggressive a blur.  20 is a reasonable number.  Higher is more blurry.
+#default_censor_style = [ 'pixel', 40 ] # second item is the how much to pixelate.  Higher is more censored.  10 means that a 200x400 pixel region is pixelated to 20x40 pixels.
 
 # min_prob: how confident are we that the item is identified before blocking
 default_min_prob = 0.60 #0.50 means 50% certainty
@@ -123,3 +124,12 @@ censor_overlap_strategy = {
 censor_scale_strategy = 'feature' # scales N->1 by min feature dimension, with a 100 base (so a 200x400 feature would be 2N->1)
 #censor_scale_strategy = 'image' # scales N->1 by max image dimension, with 1000 base (so a 2000x1200 image would be 2N->1)
 #censor_scale_strategy = 'none' # uses N -> 1 reduction
+
+# this determines how much delay is present in BetaVision
+# you may need to adjust this for performance reasons
+betavision_delay = 0.5 # seconds
+
+# should BetaVision use image interpolation?
+# setting this to true may make videos in BetaVision
+# smoother, but creates ghosting.
+betavision_interpolate = False

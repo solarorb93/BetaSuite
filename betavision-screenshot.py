@@ -8,14 +8,6 @@ import betautils
 import betaconst
 
 with mss.mss() as sct:
-    monitor = {
-            'left': betaconfig.vision_cap_left,
-            'top': betaconfig.vision_cap_top,
-            'width': betaconfig.vision_cap_width,
-            'height': betaconfig.vision_cap_height,
-            'mon': betaconfig.vision_cap_monitor,
-    }
-
     shared_mem_inited = False
 
     # good enough
@@ -26,9 +18,9 @@ with mss.mss() as sct:
         adj_images.append( None )
 
     while( True ):
-        sct_time = time.monotonic()
+        ( sct_time, grab ) = betautils.get_screenshot( sct )
         timestamp = np.array( [ sct_time ] )
-        grab = np.array( sct.grab( monitor ) )[:,:,:3]
+
         for i, size in enumerate( betaconfig.picture_sizes ):
             adj_images[i] = betautils.prep_img_for_nn( grab, size, betautils.get_image_resize_scale( grab, size ) )
 
