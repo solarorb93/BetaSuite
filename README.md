@@ -7,7 +7,7 @@ BetaSuite is composed of the following programs
 - BetaTV: this is a program that auto-censors video files.
 - BetaVision: this is a program that performs real-time censoring of your screen.
 
-These are the installation guidelines for BetaSuite v0.1.1-rc3.  At this time only BetaTest, BetaStare, and BetaTV are supported, with BetaVision coming in a later release (it is working and fully functional, it just needs work to get it into a easy-to-use state).
+These are the installation guidelines for BetaSuite v0.1.1.  At this time only BetaTest, BetaStare, and BetaTV are supported, with BetaVision coming in a later release (it is working and fully functional, it just needs work to get it into a easy-to-use state).
 
 ## Upgrading from v0.0.1
 If you have not installed BetaSuite v0.0.1, ignore this section.  
@@ -15,7 +15,7 @@ If you have not installed BetaSuite v0.0.1, ignore this section.
 If you are upgrading from v0.0.1, you have to do the following steps:
 - Delete the ffmpeg you downloaded and download it again.  I'm sorry, I had you download the wrong version.  You need the -gpl version, not the -lgpl version.  You can follow the instructions in the ffmpeg section in this document.
 - Create uncensored_vids, censored_vids, and vid_hashes folders in /InstallFolder/, just like you did uncensored_pics, etc.
-- Complete the Download BetaSuite section below to download v0.1.1-rc3.
+- Complete the Download BetaSuite section below to download v0.1.1.
 - Whatever changes you made to the betaconfig file, make them again in the new betaconfig file
 - Read the section on Testing BetaTV to Censor Videos to learn how to use BetaTV, and read the Configuring BetaSuite section to learn about the new config options.
 
@@ -39,7 +39,7 @@ Yes, you really have to do all these things.
 
 2. Install Python Packages
     * BetaSuite relies on a number of public packages for Python that must be installed.
-    * Open a cmd window by going to Start->Run and entering cmd and then pressing enter.  Then type the following commands one at a time, hitting enter after each one and allowing the package to install.
+    * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  Then type the following commands one at a time, hitting enter after each one and allowing the package to install.
         * `pip install mss`
         * `pip install pywin32`
         * `pip install numpy`
@@ -59,8 +59,8 @@ Yes, you really have to do all these things.
         * InstallFolder/vid_hashes/
 
 4. Install ffmpeg
-    * ffmpeg is used for manipulating video files. Builds for Windows are available here: https://ffmpeg.org/download.html#build-windows
-    * I recommend clicking on "Windows Builds by BtBN" and then downloading "ffmpeg-master-latest-win64-lgpl.zip".  
+    * ffmpeg is used for manipulating video files. Builds for Windows are available here: https://ffmpeg.org/download.html#build-windows .  You may need to hover your mouse over the blue Windows logo on the left hand side to get the Windows links to show up.
+    * I recommend clicking on "Windows Builds by BtBN" and then downloading "ffmpeg-master-latest-win64-gpl.zip".  
     * Whatever version you download, unzip it into InstallFolder/ffmpeg/.  So you should have, for example, InstallFolder/ffmpeg/bin/ffmpeg.exe.
 
 5. Download NudeNet neural net model
@@ -69,11 +69,11 @@ Yes, you really have to do all these things.
     * Download the file and put it in InstallFolder/model/.  So you should have InstallFolder/model/detector_v2_default_checkpoint.onnx.
 
 6. Download BetaSuite
-    * Download BetaSuite v0.1.1-rc3 source code zip file from this link: https://github.com/solarorb93/BetaSuite/releases/tag/v0.1.1-rc3
-    * Unzip the files into InstallFolder/BetaSuite-0.1.1-rc3/ (so you should have a file InstallFolder/BetaSuite-0.1.1-rc3/betastare.py)
+    * Download BetaSuite v0.1.1 source code zip file from this link: https://github.com/solarorb93/BetaSuite/releases/tag/v0.1.1
+    * Unzip the files into InstallFolder/BetaSuite-0.1.1/ (so you should have a file InstallFolder/BetaSuite-0.1.1/betastare.py)
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `c:` where c is the letter of the drive that InstallFolder is located on
-        * `cd InstallFolder/BetaSuite-0.1.1-rc3/` where InstallFolder is your InstallFolder
+        * `cd InstallFolder/BetaSuite-0.1.1/` where InstallFolder is your InstallFolder
         * `python betatest.py`
     * If anything is printed out after the final command, something is incorrect with your setup steps.
 
@@ -81,7 +81,7 @@ Yes, you really have to do all these things.
 * Take one image you want to censor and copy it to InstallFolder/uncensored_pics
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.1.1-rc3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.1.1/` where InstallFolder is your InstallFolder
     * `python betastare.py`
 * You should now see a censored version of the image in InstallFolder/censored_pics
 
@@ -102,23 +102,23 @@ This section is only for users with a modern NVidia graphics card.  If you do no
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `pip uninstall onnxruntime`
     * `pip install onnxruntime-gpu`
-* Navigate to InstallFolder/BetaSuite-0.1.1-rc3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=0 to `gpu_enabled=1`.
+* Navigate to InstallFolder/BetaSuite-0.1.1/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=0 to `gpu_enabled=1`.
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.1.1-rc3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.1.1/` where InstallFolder is your InstallFolder
     * `python betatest.py`
 * If anything is printed out after the final command, something is incorrect with your setup steps.
 * If for any reason you cannot make GPU Acceleration work, you need to go back to the original CPU-only setup, by doing the following steps
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `pip uninstall onnxruntime-gpu`
         * `pip install onnxruntime`
-    * Navigate to InstallFolder/BetaSuite-0.1.1-rc3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=1 to `gpu_enabled=0`. Then save and close the file.
+    * Navigate to InstallFolder/BetaSuite-0.1.1/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=1 to `gpu_enabled=0`. Then save and close the file.
 
 ## Testing BetaTV to Censor Videos
 * Take one video you want to censor and copy it to InstallFolder/uncensored_vids.  I recommend a short video (less than a minute).
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.1.1-rc3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.1.1/` where InstallFolder is your InstallFolder
     * `python betatv.py` 
 * There are three steps that will happen, from slowest to fastest
     * NudeNet detection will run on the video ("processing")
@@ -127,13 +127,13 @@ This section is only for users with a modern NVidia graphics card.  If you do no
 * You should now see a censored version of the video in InstallFolder/censored_vids
 
 ## Configuring BetaSuite
-You can adjust how the censoring works by modifying InstallFolder/BetaSuite-0.1.1-rc3/betaconfig.py.  
-Navigate to InstallFolder/BetaSuite-0.1.1-rc3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.
+You can adjust how the censoring works by modifying InstallFolder/BetaSuite-0.1.1/betaconfig.py.  
+Navigate to InstallFolder/BetaSuite-0.1.1/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.
 * `gpu_enabled`: this was covered in the "Setting Up GPU Acceleration" section above
 * `picture_sizes`: You can experiment with different values to get slightly different censoring.  In general, `[1280]` is recommended, with `[640]` being faster but less accurate and `[2560]` being slower and better for collages or group photos.  You can also combine settings to censor images in multiple passes by having two numbers, like `[1280, 2560]`, which will be slower.  You can also specify `[0]` as a size, which means the full size image or video will be passed to NudeNet.  This is generally not recommended and will usually be slower, but you can experiment with it.
 * `video_censor_fps`: for BetaTV, this determines how many frames are run through NudeNet.  Analyzing every frame is very slow.  Instead, BetaTV analyzes a portion of the frames and assumes the features don't move too much between frames.  I use `15`.  All the way down to `5` is reasonable.  Higher number is more accurate, lower number is faster.
 * `items_to_censor`: this is a list of what features you want to censor.  Put a `#` before a feature to leave it uncensored.
-* `default_censor_style`: This is the censor style that will be used by default on all censored features.  Default censor style is always specified as a list.  The first item in the list is the style; later items are configuring the details of the censoring.  There are there methods supported:
+* `default_censor_style`: This is the censor style that will be used by default on all censored features.  Default censor style is always specified as a list.  The first item in the list is the style; later items are configuring the details of the censoring.  There are three methods supported:
     * `bar`: draws a solid rectangle over the feature.  The second argument is the color of the bar, in BGR (which is the same as RGB, but backwards).  For example:
         * `default_censor_style = [ 'bar', (0,0,0) ]` draws a black bar
         * `default_censor_style = [ 'bar', (192,154,247) ]` draws a pink bar
@@ -158,6 +158,8 @@ Navigate to InstallFolder/BetaSuite-0.1.1-rc3/ and open betaconfig.py in Notepad
     * This is a 'feature' in newer versions of Windows.  When you click on a cmd window, it freezes whatever programs are running to allow you to copy text out of the window.  Pressing Escape exits this mode, allowing programs to keep running.
 
 ## Changelog
+* v0.1.1: 2022-07-27
+    * Don't try to process frames past the last frame of a video
 * v0.1.1-rc3: 2022-07-27
     * Handle non-1 audio stream id
     * handle non-even video dimension

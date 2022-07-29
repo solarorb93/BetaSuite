@@ -80,6 +80,9 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
 
                                 i += 1
                                 t_pos = i / betaconfig.video_censor_fps
+                                new_frame = math.floor( t_pos * vid_fps )
+                                if new_frame >= num_frames:
+                                    break
                                 cap.set( cv2.CAP_PROP_POS_FRAMES, math.floor( t_pos * vid_fps ) )
 
                             betautils.write_json( raw_boxes, box_hash_path )
