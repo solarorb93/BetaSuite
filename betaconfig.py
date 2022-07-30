@@ -42,11 +42,6 @@ vision_cap_left = 2560
 vision_cap_height = 1370
 vision_cap_width = 1440
 
-#### how long a delay should be imposed on the censored content
-#### how low this can go depends on how quickly your system
-#### can detect and censor content.  
-vision_delay = 0.500 #seconds
-
 ###################################################################
 ###### censoring config
 ###### this section controls what is censored
