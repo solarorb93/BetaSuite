@@ -91,7 +91,7 @@ while( True ):
     cy = cy - betaconfig.vision_cap_top
 
     if 5<cx<betaconfig.vision_cap_width and 5<cy<betaconfig.vision_cap_height:
-        frame[cy-5:cy+5,cx-5:cx+5] = betaconfig.vision_cursor_color
+        frame[cy-5:cy+5,cx-5:cx+5] = tuple( reversed( betaconfig.vision_cursor_color ) )
 
     times.append(time.perf_counter())
     cv2.imshow( window_name, frame )

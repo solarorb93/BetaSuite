@@ -76,8 +76,8 @@ items_to_censor = [
 # censor style: whether the default censor should be black bars, pixelate, or blur.  Uncomment
 # one of the below (by removing the #).
 # you can override these per item below in Item Overrides
-default_censor_style = [ 'bar', (0,0,0) ] # second item is the color of the bar, in BGR code (same as RGB, but backwards).
-#default_censor_style = [ 'bar', (192,154,247) ] # second item is the color of the bar, in BGR code (same as RGB, but backwards).
+default_censor_style = [ 'bar', (255,0,0) ] # second item is the color of the bar, in RGB code 
+#default_censor_style = [ 'bar', (247,154,192) ] # second item is the color of the bar, in RGB code 
 #default_censor_style = [ 'blur', 50 ] # second item is how aggressive a blur.  20 is a reasonable number.  Higher is more blurry.
 #default_censor_style = [ 'pixel', 40 ] # second item is the how much to pixelate.  Higher is more censored.  10 means that a 200x400 pixel region is pixelated to 20x40 pixels.
 
@@ -134,5 +134,5 @@ betavision_delay = 0.5 # seconds
 # smoother, but creates ghosting.
 betavision_interpolate = False
 
-### color for the replacement cursor for BetaVision
-vision_cursor_color = (253,93,168)
+### color for the replacement cursor for BetaVision, in RGB
+vision_cursor_color = (168,93,253)

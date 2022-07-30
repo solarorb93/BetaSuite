@@ -152,6 +152,7 @@ def blur_image( image, x, y, w, h, factor ):
     return( image )
 
 def bar_image( image, x, y, w, h, color ):
+    color = tuple( reversed( color ) )
     image = np.ascontiguousarray( image )
     image = cv2.rectangle( image, (x,y), (x+w,y+h), color, cv2.FILLED )
     return( image )
