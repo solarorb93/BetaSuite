@@ -1,33 +1,30 @@
-from pathlib import Path
-import onnxruntime
 import cv2
-import betaconst
-import betautils
-import betaconfig
-import numpy as np
 import os
-import json
 import math
 import time
-import hashlib
 import subprocess as sp
+
+import betaconst
+import betaconfig
+
+import betautils_hash as bu_hash
+import betautils_config as bu_config
+import betautils_model as bu_model
+import betautils_video as bu_video
+import betautils_censor as bu_censor
 
 cap = cv2.VideoCapture()
 
-censor_hash = betautils.get_censor_hash()
-session = betautils.get_session()
+censor_hash = bu_hash.get_censor_hash()
+session = bu_model.get_session()
 
-parts_to_blur = betautils.get_parts_to_blur()
+parts_to_blur = bu_config.get_parts_to_blur()
 
 images_to_censor = []
 images_to_detect = []
 
-has_audio = False
-
 to_censor = []
 to_detect = []
-
-session = betautils.get_session()
 
 for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
     censored_folder = root.replace( betaconst.video_path_uncensored, betaconst.video_path_censored, 1 )
@@ -44,7 +41,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
 
             cap.open( uncensored_path )
             if cap.isOpened():
-                file_hash = betautils.md5_for_file( uncensored_path, 16 );
+                file_hash = bu_hash.md5_for_file( uncensored_path, 16 );
 
                 censored_path = os.path.join( censored_folder, '%s-%s-%s-%s-%d-%.3f%s'%(stem, file_hash, censor_hash, "+".join(map(str,betaconfig.picture_sizes)), betaconfig.video_censor_fps, betaconst.global_min_prob, ".mp4"))
                 censored_avi  = os.path.join( censored_folder, '%s-%s-%s-%s-%d-%.3f%s'%(stem, file_hash, censor_hash, "+".join(map(str,betaconfig.picture_sizes)), betaconfig.video_censor_fps, betaconst.global_min_prob, ".avi"))
@@ -62,7 +59,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                         box_hash_path = '../vid_hashes/%s-%s-%d-%d-%.3f.gz'%(file_hash,betaconst.picture_saved_box_version, size, betaconfig.video_censor_fps, betaconst.global_min_prob)
 
                         if( os.path.exists( box_hash_path ) ):
-                            all_raw_boxes.append( betautils.read_json( box_hash_path ) )
+                            all_raw_boxes.append( bu_hash.read_json( box_hash_path ) )
                         else:
                             raw_boxes = []
                             cap.set( cv2.CAP_PROP_POS_FRAMES, 0 )
@@ -74,7 +71,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                     break
 
                                 print( "size %d: processing frame %d/%d"%(size, cap.get(cv2.CAP_PROP_POS_FRAMES ), num_frames ), end="\r" )
-                                this_raw_boxes = betautils.raw_boxes_for_img( frame, size, session, t_pos )
+                                this_raw_boxes = bu_model.raw_boxes_for_img( frame, size, session, t_pos )
 
                                 raw_boxes.extend( this_raw_boxes )
 
@@ -85,14 +82,14 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                     break
                                 cap.set( cv2.CAP_PROP_POS_FRAMES, math.floor( t_pos * vid_fps ) )
 
-                            betautils.write_json( raw_boxes, box_hash_path )
+                            bu_hash.write_json( raw_boxes, box_hash_path )
                             all_raw_boxes.append( raw_boxes )
                             print( "size %d: processing complete....................."%size )
 
                     boxes = [];
                     for raw_boxes in all_raw_boxes:
                         for raw in raw_boxes:
-                            res = betautils.process_raw_box( raw, vid_w, vid_h )
+                            res = bu_censor.process_raw_box( raw, vid_w, vid_h )
                             if res:
                                 boxes.append( res )
 
@@ -132,7 +129,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                         while len( boxes ) and boxes[0]['start'] <= curr_time:
                             live_boxes.append( boxes.pop(0) )
 
-                        frame = betautils.censor_img_for_boxes( frame, live_boxes )
+                        frame = bu_censor.censor_img_for_boxes( frame, live_boxes )
 
                         proc.stdin.write(frame.tobytes())
                         i+=1
@@ -142,7 +139,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                     proc.wait()
 
                     print( "encoding complete, re-encoding to final output.........." );
-                    has_audio = betautils.video_file_has_audio( uncensored_path )
+                    has_audio = bu_video.video_file_has_audio( uncensored_path )
 
                     if has_audio:
                         command =  [ '../ffmpeg/bin/ffmpeg.exe',

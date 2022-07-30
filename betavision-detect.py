@@ -2,11 +2,13 @@ import numpy as np
 import time
 from multiprocessing import shared_memory
 
-import betautils
 import betaconst
 import betaconfig
 
-session = betautils.get_session()
+import betautils_vision as bu_vision
+import betautils_model as bu_model
+
+session = bu_model.get_session()
 
 in_timestamp1_shm = shared_memory.SharedMemory( name=betaconst.bv_ss_timestamp1_name )
 in_timestamp2_shm = shared_memory.SharedMemory( name=betaconst.bv_ss_timestamp2_name )
@@ -36,8 +38,8 @@ raw_shms = []
 raw_screenshots = []
 local_screenshots = []
 for size in betaconfig.picture_sizes:
-    raw_shms.append( shared_memory.SharedMemory( name=betautils.shm_name_for_screenshot( size ) ) )
-    (this_height, this_width) = betautils.vision_adj_img_size( size )
+    raw_shms.append( shared_memory.SharedMemory( name=bu_vision.shm_name_for_screenshot( size ) ) )
+    (this_height, this_width) = bu_vision.vision_adj_img_size( size )
     raw_screenshots.append( np.ndarray( ( this_height, this_width, 3 ), dtype=np.float32, buffer = raw_shms[-1].buf ) )
     local_screenshots.append( np.ndarray( ( this_height, this_width, 3 ), dtype=np.float32 ) )
 
@@ -52,7 +54,7 @@ while( True ):
     for i,local in enumerate(local_screenshots):
         local[:] = raw_screenshots[i][:]
 
-    ( local_out_0, local_out_1, local_out_2 ) = betautils.get_raw_model_output( local_screenshots, session )
+    ( local_out_0, local_out_1, local_out_2 ) = bu_model.get_raw_model_output( local_screenshots, session )
 
     out_timestamp1[0] = last_timestamp
     remote_out_0[:]=local_out_0[:]
