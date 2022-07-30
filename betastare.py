@@ -1,20 +1,20 @@
-from pathlib import Path
-import onnxruntime
 import cv2
-import betaconst
-import betautils
-import betaconfig
-import numpy as np
 import os
-import json
-import math
 import time
 import hashlib
 
-censor_hash = betautils.get_censor_hash()
-session = betautils.get_session()
+import betaconst
+import betaconfig
 
-parts_to_blur = betautils.get_parts_to_blur()
+import betautils_config as bu_config
+import betautils_hash   as bu_hash
+import betautils_model  as bu_model
+import betautils_censor as bu_censor
+
+censor_hash = bu_hash.get_censor_hash()
+session = bu_model.get_session()
+
+parts_to_blur = bu_config.get_parts_to_blur()
 
 images_to_censor = []
 images_to_detect = []
@@ -28,7 +28,6 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
 
 fidx = 0
 
-#for file in Path(betaconst.picture_path_uncensored).iterdir():
 for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
     censored_folder = root.replace( betaconst.picture_path_uncensored, betaconst.picture_path_censored, 1 )
     os.makedirs( censored_folder, exist_ok=True )
@@ -57,13 +56,13 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
                         box_hash_path = '../pic_hashes/%s-%s-%d-%.3f.gz'%(image_hash,betaconst.picture_saved_box_version, size, betaconst.global_min_prob)
 
                         if( os.path.exists( box_hash_path ) ):
-                            all_raw_boxes.append( betautils.read_json( box_hash_path ) )
+                            all_raw_boxes.append( bu_hash.read_json( box_hash_path ) )
                             use_nn = False
 
                         else:
-                            raw_boxes = betautils.raw_boxes_for_img( image, size, session, 0 )
+                            raw_boxes = bu_model.raw_boxes_for_img( image, size, session, 0 )
 
-                            betautils.write_json( raw_boxes, box_hash_path )
+                            bu_hash.write_json( raw_boxes, box_hash_path )
                             all_raw_boxes.append( raw_boxes )
                             use_nn = True
 
@@ -71,11 +70,11 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
                     boxes = []
                     for raw_boxes in all_raw_boxes:
                         for item in raw_boxes:
-                            res = betautils.process_raw_box( item, img_w, img_h )
+                            res = bu_censor.process_raw_box( item, img_w, img_h )
                             if res:
                                 boxes.append( res )
 
-                    image = betautils.censor_img_for_boxes( image, boxes )
+                    image = bu_censor.censor_img_for_boxes( image, boxes )
 
                     t3 = time.perf_counter()
                     cv2.imwrite(censored_path, image )
@@ -92,9 +91,3 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
             print( "--- Skipping  %d/%d (failed)  [----- ----- ----- -----: -----]: %s"%(fidx, num_files, fname ) )
             print( f"Error {err=}, {type(err)=}" )
             time.sleep( 1 )
-
-
-        #print( '%d: Censoring  %s%s...'%(file_index,stem, suffix ) )
-
-        #to_censor_info = {'image':image, 'censored_path':censored_path}
-

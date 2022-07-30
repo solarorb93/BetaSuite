@@ -5,9 +5,12 @@ import cv2
 import numpy as np
 import win32gui, win32ui
 
-import betautils
 import betaconfig
 import betaconst
+
+import betautils_model as bu_model
+import betautils_vision as bu_vision
+import betautils_censor as bu_censor
 
 ### set up for detection
 outputs_0_shm = shared_memory.SharedMemory( name=betaconst.bv_detect_shm_0_name )
@@ -32,7 +35,7 @@ last_detect_timestamp = 0
 
 scale_array = []
 for size in betaconfig.picture_sizes:
-    scale_array.append( betautils.get_resize_scale( betaconfig.vision_cap_width, betaconfig.vision_cap_height, size ) )
+    scale_array.append( bu_model.get_resize_scale( betaconfig.vision_cap_width, betaconfig.vision_cap_height, size ) )
 
 ### set up for censoring
 img_buffer = []
@@ -46,7 +49,7 @@ sct = mss.mss()
 while( True ):
     times = []
     times.append(time.perf_counter())
-    img_buffer.append( betautils.get_screenshot( sct ) )
+    img_buffer.append( bu_vision.get_screenshot( sct ) )
 
     times.append(time.perf_counter())
     if( remote_timestamp1[0] == remote_timestamp2[0] and remote_timestamp1[0] != last_detect_timestamp ):
@@ -55,10 +58,10 @@ while( True ):
         local_out_1[:]=remote_out_1[:]
         local_out_2[:]=remote_out_2[:]
 
-        all_raw_boxes =  betautils.raw_boxes_from_model_output( [ local_out_0, local_out_1, local_out_2 ], scale_array, last_detect_timestamp )
+        all_raw_boxes =  bu_model.raw_boxes_from_model_output( [ local_out_0, local_out_1, local_out_2 ], scale_array, last_detect_timestamp )
 
         raw_boxes = [ box for raw_boxes in all_raw_boxes for box in raw_boxes ]
-        this_boxes = [ betautils.process_raw_box( raw, betaconfig.vision_cap_width, betaconfig.vision_cap_height ) for raw in raw_boxes ]
+        this_boxes = [ bu_censor.process_raw_box( raw, betaconfig.vision_cap_width, betaconfig.vision_cap_height ) for raw in raw_boxes ]
         this_boxes = [ box for box in this_boxes if box ]
         boxes.extend( this_boxes )
         boxes.sort( key=lambda x: x['end'] )
@@ -76,7 +79,7 @@ while( True ):
 
     times.append(time.perf_counter())
     if betaconfig.betavision_interpolate:
-        frame = betautils.interpolate_images( img_buffer[0][1], img_buffer[0][0], img_buffer[1][1], img_buffer[1][0], frame_timestamp )
+        frame = bu_vision.interpolate_images( img_buffer[0][1], img_buffer[0][0], img_buffer[1][1], img_buffer[1][0], frame_timestamp )
     else: 
         frame = img_buffer[0][1]
 
@@ -84,7 +87,7 @@ while( True ):
     live_boxes = [ box for box in boxes if box['start'] < frame_timestamp < box['end'] ]
 
     times.append(time.perf_counter())
-    frame = betautils.censor_img_for_boxes( frame, live_boxes )
+    frame = bu_censor.censor_img_for_boxes( frame, live_boxes )
 
     flags, hcursor, (cx,cy) = win32gui.GetCursorInfo()
     cx = cx - betaconfig.vision_cap_left
