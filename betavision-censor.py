@@ -77,6 +77,10 @@ while( True ):
     times.append(time.perf_counter())
     frame_timestamp = time.monotonic() - betaconfig.betavision_delay
 
+    # nothing in the buffer is old enough
+    if img_buffer[0][0] > frame_timestamp:
+        continue
+
     times.append(time.perf_counter())
     if betaconfig.betavision_interpolate:
         frame = bu_vision.interpolate_images( img_buffer[0][1], img_buffer[0][0], img_buffer[1][1], img_buffer[1][0], frame_timestamp )
