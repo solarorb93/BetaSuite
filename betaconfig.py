@@ -36,7 +36,7 @@ video_censor_fps = 5
 #### part of your screen and displaying it censored on another
 #### part of your screen.  Here, configure what part of the screen
 #### holds the uncensored content.  
-vision_cap_monitor = 2
+vision_cap_monitor = 0 # 0 means 'all monitors'.  You can almost certainly leave this as 0.
 vision_cap_top = 646
 vision_cap_left = 2560
 vision_cap_height = 1370
