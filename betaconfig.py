@@ -5,7 +5,7 @@
 #### If you have not, set this to 0.
 #### Only BetaStare and BetaTV are supported with gpu_enabled = 0, 
 #### BetaVision is only supported with gpu_enabled=1.
-gpu_enabled=1
+gpu_enabled=0
 
 ###################################################################
 #### Neural Net input size.  This controls how the net views the image.
@@ -37,10 +37,10 @@ video_censor_fps = 5
 #### part of your screen.  Here, configure what part of the screen
 #### holds the uncensored content.  
 vision_cap_monitor = 0 # 0 means 'all monitors'.  You can almost certainly leave this as 0.
-vision_cap_top = 646
-vision_cap_left = 2560
-vision_cap_height = 1370
-vision_cap_width = 1440
+vision_cap_top = 0
+vision_cap_left = 0
+vision_cap_height = 1080
+vision_cap_width = 960
 
 ###################################################################
 ###### censoring config
@@ -93,7 +93,7 @@ item_overrides = {
 
         'exposed_vulva':  {'width_area_safety': 0.4, 'height_area_safety': 0.4 },
         'exposed_breast': {'width_area_safety': 0.4 },
-        'covered_breast': {'width_area_safety': 0.5 },
+        'covered_breast': {'width_area_safety': 0.4 },
         'face_femme': {'censor_style': [ 'pixel', 10 ] }
 }
 
