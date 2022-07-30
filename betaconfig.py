@@ -128,6 +128,7 @@ betavision_delay = 0.5 # seconds
 # setting this to true may make videos in BetaVision
 # smoother, but creates ghosting.
 betavision_interpolate = False
+#betavision_interpolate = True
 
 ### color for the replacement cursor for BetaVision, in RGB
 vision_cursor_color = (168,93,253)
