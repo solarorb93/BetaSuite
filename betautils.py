@@ -8,6 +8,7 @@ import cv2
 import math
 import subprocess
 import gzip
+import time
 
 def get_parts_to_blur():
     parts_to_blur={}
@@ -54,12 +55,15 @@ def get_session():
     session = onnxruntime.InferenceSession( '../model/detector_v2_default_checkpoint.onnx', providers=providers )
     return( session )
 
-def get_image_resize_scale( raw_img, max_length ):
+def get_resize_scale( img_h, img_w, max_length ):
     if max_length == 0:
         return(1)
+    else:
+        return( max_length/max(img_h,img_w) )
+
+def get_image_resize_scale( raw_img, max_length ):
     (s1, s2, _) = raw_img.shape
-    scale = max_length/max(s1,s2)
-    return( scale )
+    return( get_resize_scale( s1, s2, max_length ) )
 
 def prep_img_for_nn( raw_img, size, scale ):
     adj_img = cv2.resize( raw_img, None, fx=scale, fy=scale )
@@ -72,9 +76,21 @@ def prep_img_for_nn( raw_img, size, scale ):
     adj_img -= [103.939, 116.779, 123.68 ]
     return( adj_img )
 
-def detect_raw_boxes( img_array, session, scale_array, t ):
+def get_raw_model_output( img_array, session ):
+    output = [
+            np.zeros( (len( img_array ), 300, 4 ), dtype = np.float32 ),
+            np.zeros( (len( img_array ), 300 ), dtype = np.float32 ),
+            np.zeros( (len( img_array ), 300 ), dtype = np.int32 ),
+    ]
+
+    #model_output = session.run( betaconst.model_outputs, {betaconst.model_input: img_array})
+    for i,img in enumerate( img_array ):
+        (output[0][i], output[1][i], output[2][i]) = session.run( betaconst.model_outputs, {betaconst.model_input: [img_array[i]]})
+
+    return( output )
+
+def raw_boxes_from_model_output( model_output, scale_array, t ):
     all_raw_boxes = []
-    model_output = session.run( betaconst.model_outputs, {betaconst.model_input: img_array})
     all_boxes   = model_output[0]
     all_scores  = model_output[1]
     all_classes = model_output[2]
@@ -93,6 +109,10 @@ def detect_raw_boxes( img_array, session, scale_array, t ):
                 } )
         all_raw_boxes.append(raw_boxes)
     return( all_raw_boxes )
+
+def detect_raw_boxes( img_array, session, scale_array, t ):
+    model_output = get_raw_model_output( img_array, session )
+    return( raw_boxes_from_model_output( model_output, scale_array, t ) )
     
 def raw_boxes_for_img( img, size, session, t ):
     scale = get_image_resize_scale( img, size )
@@ -132,6 +152,8 @@ def blur_image( image, x, y, w, h, factor ):
     return( image )
 
 def bar_image( image, x, y, w, h, color ):
+    color = tuple( reversed( color ) )
+    image = np.ascontiguousarray( image )
     image = cv2.rectangle( image, (x,y), (x+w,y+h), color, cv2.FILLED )
     return( image )
 
@@ -245,3 +267,38 @@ def video_file_has_audio( filepath ):
         return( True )
     else:
         return( False )
+
+def get_screenshot( sct ):
+    monitor = {
+            'left': betaconfig.vision_cap_left,
+            'top': betaconfig.vision_cap_top,
+            'width': betaconfig.vision_cap_width,
+            'height': betaconfig.vision_cap_height,
+            'mon': betaconfig.vision_cap_monitor,
+    }
+
+    sct_time = time.monotonic()
+    sct_img = np.array( sct.grab( monitor ) )[:,:,:3]
+
+    return( [ sct_time, sct_img ] )
+
+def shm_name_for_screenshot( size ):
+    return( 'raw_grab_%d'%size )
+
+def interpolate_images( img1, ts1, img2, ts2, timestamp ):
+    assert( ts1 < ts2 )
+    if timestamp < ts1:
+        return( img1 )
+    if ts2 < timestamp:
+        return( img2 )
+
+    pct2 = (timestamp - ts1)/(ts2 - ts1)
+    pct1 = 1 - pct2
+
+    return( cv2.addWeighted( img1, pct1, img2, pct2, 0 ) )
+
+def vision_adj_img_size( max_length ):
+    if max_length != 0:
+        return( ( max_length, max_length ) )
+    else:
+        return( ( betaconfig.vision_cap_height, betaconfig.vision_cap_width ) )

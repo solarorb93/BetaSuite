@@ -5,7 +5,7 @@
 #### If you have not, set this to 0.
 #### Only BetaStare and BetaTV are supported with gpu_enabled = 0, 
 #### BetaVision is only supported with gpu_enabled=1.
-gpu_enabled=0
+gpu_enabled=1
 
 ###################################################################
 #### Neural Net input size.  This controls how the net views the image.
@@ -31,6 +31,17 @@ picture_sizes = [ 1280 ]
 #### best accuracy.
 video_censor_fps = 5
 
+##################################################################
+#### BetaVision works by capturing uncensored content from one
+#### part of your screen and displaying it censored on another
+#### part of your screen.  Here, configure what part of the screen
+#### holds the uncensored content.  
+vision_cap_monitor = 0 # 0 means 'all monitors'.  You can almost certainly leave this as 0.
+vision_cap_top = 646
+vision_cap_left = 2560
+vision_cap_height = 1370
+vision_cap_width = 1440
+
 ###################################################################
 ###### censoring config
 ###### this section controls what is censored
@@ -45,7 +56,7 @@ items_to_censor = [
     'exposed_buttocks',
     'covered_vulva',
     'covered_breast',
-    #'covered_buttocks',
+    'covered_buttocks',
     'face_femme',
     #'exposed_belly',
     #'covered_belly',
@@ -60,9 +71,10 @@ items_to_censor = [
 # censor style: whether the default censor should be black bars, pixelate, or blur.  Uncomment
 # one of the below (by removing the #).
 # you can override these per item below in Item Overrides
-default_censor_style = [ 'bar', (192,154,247) ] # second item is the color of the bar, in BGR code (same as RGB, but backwards).
-#default_censor_style = [ 'blur', 20 ] # second item is how aggressive a blur.  20 is a reasonable number.  Higher is more blurry.
-#default_censor_style = [ 'pixel', 20 ] # second item is the how much to pixelate.  Higher is more censored.  10 means that a 200x400 pixel region is pixelated to 20x40 pixels.
+#default_censor_style = [ 'bar', (0,0,0) ] # second item is the color of the bar, in RGB code 
+default_censor_style = [ 'bar', (247,154,192) ] # second item is the color of the bar, in RGB code 
+#default_censor_style = [ 'blur', 50 ] # second item is how aggressive a blur.  20 is a reasonable number.  Higher is more blurry.
+#default_censor_style = [ 'pixel', 40 ] # second item is the how much to pixelate.  Higher is more censored.  10 means that a 200x400 pixel region is pixelated to 20x40 pixels.
 
 # min_prob: how confident are we that the item is identified before blocking
 default_min_prob = 0.60 #0.50 means 50% certainty
@@ -107,3 +119,16 @@ censor_overlap_strategy = {
 censor_scale_strategy = 'feature' # scales N->1 by min feature dimension, with a 100 base (so a 200x400 feature would be 2N->1)
 #censor_scale_strategy = 'image' # scales N->1 by max image dimension, with 1000 base (so a 2000x1200 image would be 2N->1)
 #censor_scale_strategy = 'none' # uses N -> 1 reduction
+
+# this determines how much delay is present in BetaVision
+# you may need to adjust this for performance reasons
+betavision_delay = 0.5 # seconds
+
+# should BetaVision use image interpolation?
+# setting this to true may make videos in BetaVision
+# smoother, but creates ghosting.
+betavision_interpolate = False
+#betavision_interpolate = True
+
+### color for the replacement cursor for BetaVision, in RGB
+vision_cursor_color = (168,93,253)

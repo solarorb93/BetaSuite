@@ -36,4 +36,11 @@ classes = [
     'exposed_penis',
 ]
 
-video_segment_length = 45 #seconds
+bv_ss_timestamp1_name = 'bv_ss_timestamp1_name'
+bv_ss_timestamp2_name = 'bv_ss_timestamp2_name'
+bv_detect_timestamp1_name = 'bv_detect_timestamp1_name'
+bv_detect_timestamp2_name = 'bv_detects_timestamp2_name'
+
+bv_detect_shm_0_name = "bv_detect_shm_0_name"
+bv_detect_shm_1_name = "bv_detect_shm_1_name"
+bv_detect_shm_2_name = "bv_detect_shm_2_name"
