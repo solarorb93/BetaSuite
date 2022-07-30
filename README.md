@@ -190,6 +190,10 @@ Navigate to InstallFolder/BetaSuite-0.2.1/ and open betaconfig.py in Notepad by 
         * `pip install onnxruntime-gpu`
 * If your program appears "stuck" and is not printing anything in the cmd window, look at the top left of the command window title bar. If it says "Select", then click on the cmd window and press the Escape key.
     * This is a 'feature' in newer versions of Windows.  When you click on a cmd window, it freezes whatever programs are running to allow you to copy text out of the window.  Pressing Escape exits this mode, allowing programs to keep running.
+* If you see a error message saying "OpenCV... .... ... The function is not implemented.... .... .." when running BetaVision, try the following:
+    * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
+        * `pip uninstall opencv-python`
+        * `pip install opencv-python`
 
 ## Changelog
 * v0.2.1: 2022-07-29
