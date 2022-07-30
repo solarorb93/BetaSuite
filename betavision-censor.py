@@ -39,7 +39,7 @@ img_buffer = []
 boxes = []
 window_name = 'BetaVision'
 cv2.startWindowThread()
-cv2.namedWindow( window_name )
+cv2.namedWindow( window_name, cv2.WINDOW_NORMAL )
 cv2.resizeWindow( window_name, betaconfig.vision_cap_width, betaconfig.vision_cap_height )
 sct = mss.mss()
 

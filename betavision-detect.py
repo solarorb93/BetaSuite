@@ -37,8 +37,9 @@ raw_screenshots = []
 local_screenshots = []
 for size in betaconfig.picture_sizes:
     raw_shms.append( shared_memory.SharedMemory( name=betautils.shm_name_for_screenshot( size ) ) )
-    raw_screenshots.append( np.ndarray( ( size, size, 3 ), dtype=np.float32, buffer = raw_shms[-1].buf ) )
-    local_screenshots.append( np.ndarray( ( size, size, 3 ), dtype=np.float32 ) )
+    (this_height, this_width) = betautils.vision_adj_img_size( size )
+    raw_screenshots.append( np.ndarray( ( this_height, this_width, 3 ), dtype=np.float32, buffer = raw_shms[-1].buf ) )
+    local_screenshots.append( np.ndarray( ( this_height, this_width, 3 ), dtype=np.float32 ) )
 
 last_timestamp = 0
 while( True ):

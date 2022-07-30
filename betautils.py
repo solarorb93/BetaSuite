@@ -295,3 +295,9 @@ def interpolate_images( img1, ts1, img2, ts2, timestamp ):
     pct1 = 1 - pct2
 
     return( cv2.addWeighted( img1, pct1, img2, pct2, 0 ) )
+
+def vision_adj_img_size( max_length ):
+    if max_length != 0:
+        return( ( max_length, max_length ) )
+    else:
+        return( ( betaconfig.vision_cap_height, betaconfig.vision_cap_width ) )
