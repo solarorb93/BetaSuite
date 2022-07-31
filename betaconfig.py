@@ -5,7 +5,7 @@
 #### If you have not, set this to 0.
 #### Only BetaStare and BetaTV are supported with gpu_enabled = 0, 
 #### BetaVision is only supported with gpu_enabled=1.
-gpu_enabled=1
+gpu_enabled=0
 
 ###################################################################
 #### Neural Net input size.  This controls how the net views the image.
