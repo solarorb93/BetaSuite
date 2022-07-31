@@ -51,6 +51,9 @@ while( True ):
     times.append(time.perf_counter())
     img_buffer.append( bu_vision.get_screenshot( sct ) )
 
+    if betaconfig.debug_mode&2:
+        cv2.imwrite( 'debug-vision-precensor.png', img_buffer[-1][1] )
+
     times.append(time.perf_counter())
     if( remote_timestamp1[0] == remote_timestamp2[0] and remote_timestamp1[0] != last_detect_timestamp ):
         last_detect_timestamp = remote_timestamp1[0]
@@ -93,12 +96,21 @@ while( True ):
     times.append(time.perf_counter())
     frame = bu_censor.censor_img_for_boxes( frame, live_boxes )
 
+    if betaconfig.debug_mode&1:
+        frame = bu_censor.annotate_image_shape( frame )
+
     flags, hcursor, (cx,cy) = win32gui.GetCursorInfo()
     cx = cx - betaconfig.vision_cap_left
     cy = cy - betaconfig.vision_cap_top
 
     if 5<cx<betaconfig.vision_cap_width and 5<cy<betaconfig.vision_cap_height:
-        frame[cy-5:cy+5,cx-5:cx+5] = tuple( reversed( betaconfig.vision_cursor_color ) )
+        color = tuple(reversed( betaconfig.vision_cursor_color ) )
+        frame[cy-5:cy+5,cx-5:cx+5] = color
+        if betaconfig.debug_mode&1:
+            frame = cv2.putText( frame, '(%d,%d)'%(cx,cy), (max(cx-10,0),max(cy-10,0)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2 )
+
+    if betaconfig.debug_mode&2:
+        cv2.imwrite( 'debug-vision-postcensor.png', frame )
 
     times.append(time.perf_counter())
     cv2.imshow( window_name, frame )

@@ -66,6 +66,9 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
                             all_raw_boxes.append( raw_boxes )
                             use_nn = True
 
+                    if betaconfig.debug_mode&1:
+                        print( all_raw_boxes )
+
                     t2 = time.perf_counter()
                     boxes = []
                     for raw_boxes in all_raw_boxes:

@@ -95,10 +95,12 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
 
                     boxes.sort( key = lambda x: x['start'] )
 
-                    command = [ "../ffmpeg/bin/ffmpeg.exe",
-                            '-y',
-                            '-hide_banner',
-                            '-loglevel', 'error',
+                    if betaconfig.debug_mode&1:
+                        command_base = [ '../ffmpeg/bin/ffmpeg.exe', '-y' ]
+                    else:
+                        command_base = [ '../ffmpeg/bin/ffmpeg.exe', '-y', '-loglevel', 'error' ]
+
+                    command = command_base + [
                             '-f', 'rawvideo',
                             '-vcodec','rawvideo',
                             '-s', '{}x{}'.format(vid_w,vid_h),
@@ -111,6 +113,8 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                             censored_avi
                     ]
 
+                    if betaconfig.debug_mode&1:
+                        print( command )
                     proc = sp.Popen(command, stdin=sp.PIPE )
 
                     cap.set( cv2.CAP_PROP_POS_FRAMES, 0 )
@@ -142,10 +146,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                     has_audio = bu_video.video_file_has_audio( uncensored_path )
 
                     if has_audio:
-                        command =  [ '../ffmpeg/bin/ffmpeg.exe',
-                                '-y',
-                                '-hide_banner',
-                                '-loglevel', 'error',
+                        command = command_base + [
                                 '-stats',
                                 '-i', censored_avi,
                                 '-i', uncensored_path,
@@ -160,10 +161,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 censored_path
                         ]
                     else:
-                        command =  [ '../ffmpeg/bin/ffmpeg.exe',
-                                '-y',
-                                '-hide_banner',
-                                '-loglevel', 'error',
+                        command = command_base + [
                                 '-stats',
                                 '-i', censored_avi,
                                 '-c:v', 'libx264',
@@ -173,6 +171,8 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 censored_path
                         ]
 
+                    if betaconfig.debug_mode&1:
+                        print( command )
                     proc2 = sp.Popen( command ) 
                     proc2.wait()
                     os.remove( censored_avi )
