@@ -28,7 +28,6 @@ if betaconfig.gpu_enabled:
 else:
     providers = [ ( 'CPUExecutionProvider', {} ) ]
 
-providers = [ ( 'CUDAExecutionProvider', { 'device_id':0 } ), ('CPUExecutionProvider', {} ) ]
 options = onnxruntime.SessionOptions()
 options.log_severity_level = 0
 
