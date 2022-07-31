@@ -17,23 +17,24 @@ picture_path_censored   = '../censored_pics/'
 video_path_uncensored = '../uncensored_vids/'
 video_path_censored   = '../censored_vids/'
 
+# includes the RGB debug square color
 classes = [
-    'exposed_anus',
-    'exposed_armpits',
-    'covered_belly',
-    'exposed_belly',
-    'covered_buttocks',
-    'exposed_buttocks',
-    'face_femme',
-    'face_masc',
-    'covered_feet',
-    'exposed_feet',
-    'covered_breast',
-    'exposed_breast',
-    'covered_vulva',
-    'exposed_vulva',
-    'exposed_chest',
-    'exposed_penis',
+    [ 'exposed_anus',     ( 47,  79,  79), ], #darkslategray
+    [ 'exposed_armpits',  (139,  69,  19), ], #saddlebrown
+    [ 'covered_belly',    (  0, 100,   0), ], #darkgreen
+    [ 'exposed_belly',    (  0,   0, 139), ], #darkblue
+    [ 'covered_buttocks', (255,   0,   0), ], #red
+    [ 'exposed_buttocks', (255, 165,   0), ], #orange
+    [ 'face_femme',       (255, 255,   0), ], #yellow
+    [ 'face_masc',        (199,  21, 133), ], #mediumvioletred
+    [ 'covered_feet',     (  0, 255,   0), ], #lime
+    [ 'exposed_feet',     (  0, 250, 154), ], #mediumspringgreen
+    [ 'covered_breast',   (  0, 255, 255), ], #aqua
+    [ 'exposed_breast',   (  0,   0, 255), ], #blue
+    [ 'covered_vulva',    (216, 191, 216), ], #thistle
+    [ 'exposed_vulva',    (255,   0, 255), ], #fuchsia
+    [ 'exposed_chest',    ( 30, 144, 255), ], #dodgerblue
+    [ 'exposed_penis',    (240, 230, 140), ], #khaki
 ]
 
 bv_ss_timestamp1_name = 'bv_ss_timestamp1_name'

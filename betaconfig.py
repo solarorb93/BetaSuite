@@ -112,6 +112,7 @@ censor_overlap_strategy = {
         'blur': 'single-pass',
         'bar': 'none',
         'pixel': 'single-pass',
+        'debug': 'none',
         }
 
 # this determines how pixel and blur censors 
@@ -132,3 +133,8 @@ betavision_interpolate = False
 
 ### color for the replacement cursor for BetaVision, in RGB
 vision_cursor_color = (168,93,253)
+
+### Debug mode, if you are trying to solve issues
+debug_mode = 0
+#debug_mode = 1 # just show debug information
+#debug_mode = 3 # also save debug info to BetaSuite folder

@@ -1,3 +1,4 @@
+import cv2
 import mss
 import numpy as np
 import time
@@ -42,5 +43,11 @@ with mss.mss() as sct:
         for i,adj_image in enumerate(adj_images):
             shared_images[i][:]=adj_image[:]
         shared_timestamp2[:]=timestamp[:]
+
+        if betaconfig.debug_mode&2:
+            cv2.imwrite( 'debug-vision-raw-screenshot.png', bu_censor.annotate_image_shape( grab ) )
+            for i,size in enumerate(betaconfig.picture_sizes):
+                cv2.imwrite( 'debug-vision-adj-screenshot-%d-%d.png'%(i,size), bu_censor.annotate_image_shape( adj_images[i] ) )
+
         print( '%.3f'%(time.monotonic()-sct_time ))
 

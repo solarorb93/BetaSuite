@@ -35,17 +35,37 @@ def bar_image( image, x, y, w, h, color ):
     image = cv2.rectangle( image, (x,y), (x+w,y+h), color, cv2.FILLED )
     return( image )
 
-def censor_image( image, x, y, w, h, censor_style ):
-    if 'blur' == censor_style[0]:
-        return( blur_image( image, x,y, w, h, censor_style[1] ) )
-    if 'pixel' == censor_style[0]:
-        return( pixelate_image( image, x, y, w, h, censor_style[1] ) )
-    if 'bar' == censor_style[0]:
-        return( bar_image( image, x, y, w, h, censor_style[1] ) )
+def debug_image( image, box ):
+    x = box['x']
+    y = box['y']
+    w = box['w']
+    h = box['h']
+    color = tuple( reversed( box['censor_style'][1] ) )
+    image = np.ascontiguousarray( image )
+    image = cv2.rectangle( image, (x,y), (x+w,y+h), color, 3 )
+    image = cv2.putText( image, '(%d,%d)'%(x,y),     (x+10,y+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1 )
+    image = cv2.putText( image, '(%d,%d)'%(x+w,y+h), (x+10,y+40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1 )
+    image = cv2.putText( image, box['label'],        (x+10,y+60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1 )
+    image = cv2.putText( image, '%.2f %.1f %.1f'%(box['score'],box['start'],box['end'] ), (x+10, y+80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1 )
+    return( image )
+
+def censor_image( image, box ):
+    if 'blur' == box['censor_style'][0]:
+        return( blur_image( image, box['x'], box['y'], box['w'], box['h'], box['censor_style'][1] ) )
+    if 'pixel' == box['censor_style'][0]:
+        return( pixelate_image( image, box['x'], box['y'], box['w'], box['h'], box['censor_style'][1] ) )
+    if 'bar' == box['censor_style'][0]:
+        return( bar_image( image, box['x'], box['y'], box['w'], box['h'], box['censor_style'][1] ) )
+    if 'debug' == box['censor_style'][0]:
+        return( debug_image( image, box ) )
+
+def annotate_image_shape( image ):
+    image = np.ascontiguousarray( image )
+    return( cv2.putText( image, str( image.shape ), (20,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2 ) )
 
 def process_raw_box( raw, vid_w, vid_h ):
     parts_to_blur = bu_config.get_parts_to_blur()
-    label = betaconst.classes[int(raw['class_id'])]
+    label = betaconst.classes[int(raw['class_id'])][0]
     if label in parts_to_blur and raw['score'] > parts_to_blur[label]['min_prob']/100:
         x_area_safety = parts_to_blur[label]['width_area_safety']
         y_area_safety = parts_to_blur[label]['height_area_safety']
@@ -62,7 +82,8 @@ def process_raw_box( raw, vid_w, vid_h ):
             "w": safe_w, 
             "h": safe_h ,
             'censor_style': parts_to_blur[label]['censor_style'],
-            'label': label
+            'label': label,
+            'score': raw['score'],
         } )
     
 def rectangles_intersect( box1, box2 ):
@@ -87,6 +108,8 @@ def censor_style_sort( censor_style ):
         return( 2 + 1/(2+255*3-sum(censor_style[1])))
     if censor_style[0] == 'pixel':
         return( 3 + censor_style[1] )
+    if censor_style[0] == 'debug':
+        return( 99 )
             
 def collapse_boxes_for_style( piece ):
     style = piece[0]['censor_style'][0]
@@ -127,7 +150,7 @@ def censor_img_for_boxes( image, boxes ):
     for piece in pieces:
         collapsed_boxes = collapse_boxes_for_style( piece )
         for collapsed_box in collapsed_boxes:
-            image = censor_image( image, collapsed_box['x'], collapsed_box['y'], collapsed_box['w'], collapsed_box['h'], collapsed_box['censor_style'] )
+            image = censor_image( image, collapsed_box )
 
     return( image )
 
