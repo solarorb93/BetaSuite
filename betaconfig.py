@@ -115,7 +115,7 @@ item_overrides = {
 #### process, BetaSuite might not know.
 #### SET THIS AT YOUR OWN RISK.
 #### DON'T COME CRYING IF YOUR FILE WAS DELETED
-input_delete_probability = 0.7
+input_delete_probability = 0
 
 ###################################################################
 #### Miscellaneous
