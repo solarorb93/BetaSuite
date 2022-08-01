@@ -198,6 +198,8 @@ Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by 
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `pip uninstall opencv-python`
         * `pip install opencv-python`
+    * If that doesn't work, some users have also reported this command helping (thanks Trebor!):
+        * `pip uninstall opencv-python-headless`
 * If you are having problems with boxes not appearing to be in the right place or censoring not applied correctly, you can set debug_mode in the config file to try to see what's going on.
 
 ## Changelog
