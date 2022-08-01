@@ -59,6 +59,15 @@ def censor_image( image, box ):
     if 'debug' == box['censor_style'][0]:
         return( debug_image( image, box ) )
 
+def watermark_image( image ):
+    if betaconfig.enable_betasuite_watermark:
+        image = np.ascontiguousarray( image )
+        (h,w,_) = image.shape
+        scale = max( min(w/750,h/750), 1 )
+        return( cv2.putText( image, 'Censored with betasuite.net', (20,math.ceil(20*scale)), cv2.FONT_HERSHEY_PLAIN, scale, (0,0,255), math.floor(scale) ) )
+    else:
+        return( image )
+
 def annotate_image_shape( image ):
     image = np.ascontiguousarray( image )
     return( cv2.putText( image, str( image.shape ), (20,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2 ) )
@@ -151,6 +160,8 @@ def censor_img_for_boxes( image, boxes ):
         collapsed_boxes = collapse_boxes_for_style( piece )
         for collapsed_box in collapsed_boxes:
             image = censor_image( image, collapsed_box )
+
+    image = watermark_image( image )
 
     return( image )
 

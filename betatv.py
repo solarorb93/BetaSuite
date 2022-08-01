@@ -111,7 +111,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                             '-i', '-',
                             '-an',
                             '-c:v', 'mpeg4',
-                            '-qscale:v', '3',
+                            '-qscale:v', '1',
                             censored_avi
                     ]
 
@@ -155,7 +155,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 '-i', uncensored_path,
                                 '-c:a', 'copy',
                                 '-c:v', 'libx264',
-                                '-crf', '23',
+                                '-crf', '21',
                                 '-preset', 'veryfast',
                                 '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2',
                                 '-map', '0:0',
@@ -168,7 +168,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 '-stats',
                                 '-i', censored_avi,
                                 '-c:v', 'libx264',
-                                '-crf', '23',
+                                '-crf', '21',
                                 '-preset', 'veryfast',
                                 '-vf', 'pad=ceil(iw/2)*2:ceil(ih/2)*2',
                                 censored_path
