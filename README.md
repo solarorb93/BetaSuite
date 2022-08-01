@@ -7,17 +7,17 @@ BetaSuite is composed of the following programs
 - BetaTV: this is a program that auto-censors video files.
 - BetaVision: this is a program that performs real-time censoring of your screen.
 
-These are the installation guidelines for BetaSuite v0.2.2.
+These are the installation guidelines for BetaSuite v0.2.3.
 
 ## Upgrading from previous BetaSuite
 If you have not installed BetaSuite before, ignore this section.
 
-If you are upgrading from v0.1.1 or later, you can just redownload BetaSuite, unzip it into InstallFolder/BetaSuite-0.2.2, update betaconfig.py with your settings, and read the section on BetaVision.
+If you are upgrading from v0.1.1 or later, you can just redownload BetaSuite, unzip it into InstallFolder/BetaSuite-0.2.3, update betaconfig.py with your settings, and read the section on BetaVision.
 
 If you are upgrading from v0.0.1, you have to do the following steps:
 - Delete the ffmpeg you downloaded and download it again.  I'm sorry, I had you download the wrong version.  You need the -gpl version, not the -lgpl version.  You can follow the instructions in the ffmpeg section in this document.
 - Create uncensored_vids, censored_vids, and vid_hashes folders in /InstallFolder/, just like you did uncensored_pics, etc.
-- Complete the Download BetaSuite section below to download v0.2.2.
+- Complete the Download BetaSuite section below to download v0.2.3.
 - Whatever changes you made to the betaconfig file, make them again in the new betaconfig file
 - Read the section on Testing BetaTV to Censor Videos to learn how to use BetaTV, and read the Configuring BetaSuite section to learn about the new config options, and the section on BetaVision to learn to use BetaVision.
 
@@ -71,11 +71,11 @@ Yes, you really have to do all these things.
     * Download the file and put it in InstallFolder/model/.  So you should have InstallFolder/model/detector_v2_default_checkpoint.onnx.
 
 6. Download BetaSuite
-    * Download BetaSuite v0.2.2 source code zip file from this link: https://github.com/solarorb93/BetaSuite/releases/tag/v0.2.2
-    * Unzip the files into InstallFolder/BetaSuite-0.2.2/ (so you should have a file InstallFolder/BetaSuite-0.2.2/betastare.py)
+    * Download BetaSuite v0.2.3 source code zip file from this link: https://github.com/solarorb93/BetaSuite/releases/tag/v0.2.3
+    * Unzip the files into InstallFolder/BetaSuite-0.2.3/ (so you should have a file InstallFolder/BetaSuite-0.2.3/betastare.py)
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `c:` where c is the letter of the drive that InstallFolder is located on
-        * `cd InstallFolder/BetaSuite-0.2.2/` where InstallFolder is your InstallFolder
+        * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
         * `python betatest.py`
     * If anything is printed out after the final command, something is incorrect with your setup steps.
 
@@ -83,7 +83,7 @@ Yes, you really have to do all these things.
 * Take one image you want to censor and copy it to InstallFolder/uncensored_pics
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.2/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
     * `python betastare.py`
 * You should now see a censored version of the image in InstallFolder/censored_pics
 
@@ -104,23 +104,23 @@ This section is only for users with a modern NVidia graphics card.  If you do no
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `pip uninstall onnxruntime`
     * `pip install onnxruntime-gpu`
-* Navigate to InstallFolder/BetaSuite-0.2.2/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=0 to `gpu_enabled=1`.
+* Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=0 to `gpu_enabled=1`.
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.2/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
     * `python betatest.py`
 * If anything is printed out after the final command, something is incorrect with your setup steps.
 * If for any reason you cannot make GPU Acceleration work, you need to go back to the original CPU-only setup, by doing the following steps
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `pip uninstall onnxruntime-gpu`
         * `pip install onnxruntime`
-    * Navigate to InstallFolder/BetaSuite-0.2.2/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=1 to `gpu_enabled=0`. Then save and close the file.
+    * Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=1 to `gpu_enabled=0`. Then save and close the file.
 
 ## Testing BetaTV to Censor Videos
 * Take one video you want to censor and copy it to InstallFolder/uncensored_vids.  I recommend a short video (less than a minute).
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.2/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
     * `python betatv.py` 
 * There are three steps that will happen, from slowest to fastest
     * NudeNet detection will run on the video ("processing")
@@ -134,22 +134,22 @@ BetaVision will almost certainly not work well if you do not have GPU Accelerati
 BetaVision uses three scripts to function.  The scripts must be started in the correct order.
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.2/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
     * `python betavision-screenshot.py` which will start the first process.  The program will output numbers that represent how long BetaVision is taking to capture uncensored content, which should usually be under 0.100 (100 milliseconds).
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.2/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
     * `python betavision-detect.py` which will start the second process.  The program will output numbers that represent how long BetaVision is taking to detect features to censor, which should usually be under 0.250 (250 milliseconds).
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.2/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
     * `python betavision-censor.py` which will start the third process.  The program will output numbers that represent how long BetaVision is taking to censor the content.  The final number should usualy be under 0.080 (80 milliseconds), and hopefully under 0.050.  
 When you run the final command, a window will open that has a copy of the content in the left half of your screen.  If you put censorable content in that part of the screen, it will appear censored in near-real-time (with a 500ms delay, by default).  Sounds will be out-of-sync; a later version of this guide will document how to install VoiceMeeter to sync the sound.
 To further configure BetaVision (including what part of the screen is censored), see the Configuring BetaSuite section below.
 
 ## Configuring BetaSuite
-You can adjust how the censoring works by modifying InstallFolder/BetaSuite-0.2.2/betaconfig.py.  
-Navigate to InstallFolder/BetaSuite-0.2.2/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.
+You can adjust how the censoring works by modifying InstallFolder/BetaSuite-0.2.3/betaconfig.py.  
+Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.
 * `gpu_enabled`: this was covered in the "Setting Up GPU Acceleration" section above
 * `picture_sizes`: You can experiment with different values to get slightly different censoring.  In general, `[1280]` is recommended, with `[640]` being faster but less accurate and `[2560]` being slower and better for collages or group photos.  You can also combine settings to censor images in multiple passes by having two numbers, like `[1280, 2560]`, which will be slower.  You can also specify `[0]` as a size, which means the full size image or video will be passed to NudeNet.  This is generally not recommended and will usually be slower, but you can experiment with it.
 * `video_censor_fps`: for BetaTV, this determines how many frames are run through NudeNet.  Analyzing every frame is very slow.  Instead, BetaTV analyzes a portion of the frames and assumes the features don't move too much between frames.  I use `15`.  All the way down to `5` is reasonable.  Higher number is more accurate, lower number is faster.
@@ -157,7 +157,7 @@ Navigate to InstallFolder/BetaSuite-0.2.2/ and open betaconfig.py in Notepad by 
     * Note that these steps might not give the right values if you use display Scaling.  To see if you do, right-click on your desktop and choose Display Settings.  If "Change the size of text, apps, and other items" under "Scale and layout" is not 100%, you may not get the correct values here and may need to experiment a bit.  A fix for Scaling will be in a later BetaSuite.
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `c:` where c is the letter of the drive that InstallFolder is located on
-        * `cd InstallFolder/BetaSuite-0.2.2/` where InstallFolder is your InstallFolder
+        * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
         * `python betavision-coordinates.py` 
     * Put your mouse in the upper-left corner of the region you want to censor.  The window will show the x- and y-coordinates of that spot.  Enter the x coordinate as vision_cap_left and the y-coordinate as vision_cap_top.  Note that these could be negative.
     * Put your mouse in the bottom-right corner of the region you want to censor.  The window will show the x- and y-coordinates of that spot.  Subtract the original coordinates to get the value of vision_cap_width (new x-coordinate minus old x-coordinate) and vision_cap_height (new y-coordinate minus old y-coordinate).
@@ -176,12 +176,14 @@ Navigate to InstallFolder/BetaSuite-0.2.2/ and open betaconfig.py in Notepad by 
 * `default_time_safety`: this is relevant for BetaTV and BetaVision.  When NudeNet detects a feature to censor, the censoring is actually extended in time slightly before and slightly after the feature is identified.  This accounts for the fact that we don't analyze every single frame, and for the fact that NudeNet may occasionally miss a feature on a frame.  For example, `default_time_safety = 0.4` means that the censoring extends 0.4 seconds before the feature is found and 0.4 seconds after.  For BetaVision, it is important that this is longer than the time it takes to screenshot and detect, or you will have gaps in coverage.
 * `item_overrides`: this allows you to control the above settings on a feature-by-feature basis.  By default, breasts and exposed vulva have increased area safety, based on my testing of the net.
     * Note that you may not get very good results changing the censor style for different features that may overlap.  For example, NudeNet may sometimes identity a nude breast as both a nude breast and a covered breast, so if you have very different censors for the two of them, results may not look great.  In general, I recommend keeping the censor styles the same for features that may be overlapping.  As always, feel free to experiment and see what works best for you.
+* `input_delete_probability`: this defaults to `0`, which means that your input, uncensored files will not be deleted by BetaStare or BetaTV.  You can set this to `1` and your input files will be deleted.  You can also set this to a fraction like `0.65`, in which case every file has a 65% chance of being deleted.  Be certain, if you set this, that you are okay with your input files being deleted.  
 * `cuda_device_id`: if you have more than one GPU, and want to run BetaSuite GPU Acceleration on a non-primary card, set this.  You probably know what you're doing so I won't tell you how to set it.
 * `censor_overlap_strategy`: just leave this as the default, trust me.
 * `betavision_delay`: this setting dictates how long content is delayed in BetaVision.  Some delay is necessary, so that censorable content has time to be detected before it is shown to you.  The delay needs to be at least as long as the time it takes your computer to scsreenshot and detect censorable content. 
 * `betavision_interpolate`: this setting dictates whether BetaVision will display the last captured frame, or mix the two most recent frames.  Turning this to True makes video smoother, but introduces ghosting and artifacts.  If your system runs too slowly to get smooth video with this set to False, try setting it to True.  Ultimately, this is a personal preference.
 * `vision_cursor_color`: BetaVision draws an artificial cursor onto the censored content, so you can see where your mouse is without having to look at the uncensored content.  You can change the color here if you want.
 * `debug_mode`: setting this forces BetaSuite to sohw much more debugging information to help investigate problems.  If you are not trying to fix something that isn't working, leave this set to 0.
+* `enable_betasuite_watermark`: By default, BetaSuite adds a small watermark to the upper-left corner of censored content.  This is useful for a few reasons.  First, it makes it clear that the content has been altered, which I think is important.  Second, it allows other people to find BetaSuite and hopefully enjoy it.  I ask that you consider leaving this on if you are sharing any censored content.  However, in the spirit of open source code, you are able to turn it off by setting this to `False`.  
 * After you've made changes to betaconfig, save and close the file.  Now you can rerun BetaStare.  BetaStare will re-censor the image with the new settings and place a new copy in InstallFolder/censored_pics/.  
 * If this is all working, you are ready to go.  You can copy as many images as you like into InstallFolder/uncensored_pics/ and run BetaStare and as many videos as you like into InstallFolder/uncensored_vids/ and run BetaTV.  Subfolders are supported.  Any files which are not images are skipped (for clarity, animated gifs are not images) in BetaStare and any files which are not videos are skipped in BetaTV.  BetaSuite will be as efficient as possible; if it has already scanned a file with a neural net, it will not do so again (the results are saved in InstallFolder/pic_hashes and vid_hashes).
 
@@ -199,6 +201,13 @@ Navigate to InstallFolder/BetaSuite-0.2.2/ and open betaconfig.py in Notepad by 
 * If you are having problems with boxes not appearing to be in the right place or censoring not applied correctly, you can set debug_mode in the config file to try to see what's going on.
 
 ## Changelog
+* v0.2.3: 2022-08-01
+    * Fixed min_prob, which was broken (thank you to teasey who found the bug!)
+    * Added BetaSuite watermark, which can be turned on and off in config
+    * Added url http://betasuite.net where project page can be found
+    * Added function to optionally delete original uncensored content (thanks Rayzs177 for the suggestion!)
+    * Fixed betatest
+    * Other minor changes
 * v0.2.2: 2022-07-31
     * Add debug mode
     * Add betavision-coordinates
