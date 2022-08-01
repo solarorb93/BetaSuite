@@ -157,3 +157,13 @@ vision_cursor_color = (168,93,253)
 debug_mode = 0
 #debug_mode = 1 # just show debug information
 #debug_mode = 3 # also save debug info to BetaSuite folder
+
+### Enable BetaSuite Watermark
+### I add a small watermark to the upper-left corner
+### of censored content.  This is to make clear that the
+### content has been altered, which I think is important.
+### If you're sharing the content, I ask that you keep
+### the watermark.  However, you can turn it off here,
+### if you decide to.
+enable_betasuite_watermark = True
+#enable_betasuite_watermark = False
