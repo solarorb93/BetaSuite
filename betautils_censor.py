@@ -66,7 +66,7 @@ def annotate_image_shape( image ):
 def process_raw_box( raw, vid_w, vid_h ):
     parts_to_blur = bu_config.get_parts_to_blur()
     label = betaconst.classes[int(raw['class_id'])][0]
-    if label in parts_to_blur and raw['score'] > parts_to_blur[label]['min_prob']/100:
+    if label in parts_to_blur and raw['score'] > parts_to_blur[label]['min_prob']:
         x_area_safety = parts_to_blur[label]['width_area_safety']
         y_area_safety = parts_to_blur[label]['height_area_safety']
         time_safety = parts_to_blur[label]['time_safety']
