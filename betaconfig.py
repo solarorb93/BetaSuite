@@ -97,6 +97,25 @@ item_overrides = {
         'face_femme': {'censor_style': [ 'pixel', 10 ] }
 }
 
+################################################
+# Input Delete Probability
+#### If you set this to 1, all uncensored files
+#### will be deleted after censoring.  If you set
+#### this to a number between 0 and 1, there will 
+#### be a random chance of the input being deleted.
+#### For example, if you set it to 0.7, for each
+#### uncensored file, there is a 70% chance it will
+#### be deleted.
+#### I ***HIGHLY*** recommend testing censoring
+#### with this set to zero first.  Using this 
+#### setting is dangerous.  BetaSuite will try 
+#### to verify that the file was successfully 
+#### censored before deleting, but if there is
+#### some issue with the image or video writing
+#### process, BetaSuite might not know.
+#### SET THIS AT YOUR OWN RISK.
+#### DON'T COME CRYING IF YOUR FILE WAS DELETED
+input_delete_probability = 0.7
 
 ###################################################################
 #### Miscellaneous

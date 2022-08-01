@@ -11,6 +11,8 @@ import betautils_hash   as bu_hash
 import betautils_model  as bu_model
 import betautils_censor as bu_censor
 
+bu_config.verify_input_delete_probability()
+
 censor_hash = bu_hash.get_censor_hash()
 session = bu_model.get_session()
 
@@ -81,9 +83,11 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
 
                     t3 = time.perf_counter()
                     cv2.imwrite(censored_path, image )
+
+                    delete_result = bu_config.delete_file_with_probability( uncensored_path, censored_path )
                     t4 = time.perf_counter()
 
-                    print( "--- Processed %d/%d (nn %d)    [%.3f %.3f %.3f %.3f: %.3f]: %s"%(fidx, num_files, use_nn, t1-t0, t2-t1, t3-t2, t4-t3, t4-t0, fname ) )
+                    print( "--- Processed %d/%d%s (nn %d)    [%.3f %.3f %.3f %.3f: %.3f]: %s"%(fidx, num_files, delete_result, use_nn, t1-t0, t2-t1, t3-t2, t4-t3, t4-t0, fname ) )
 
                 else:
                     print( "--- Skipping  %d/%d (exists)  [%.3f ----- ----- -----: %.3f]: %s"%(fidx, num_files, t1-t0, t1-t0, fname ) )
