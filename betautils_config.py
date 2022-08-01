@@ -1,3 +1,6 @@
+import os
+import random
+
 import betaconfig
 import betaconst
 
@@ -24,3 +27,37 @@ def get_parts_to_blur():
 
     return parts_to_blur
 
+def verify_input_delete_probability():
+    prob = betaconfig.input_delete_probability
+    if prob == 0:
+        return()
+
+    print( '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
+    print( 'You have configured BetaSuite to delete input files with a %.2f%% chance.'%(100*prob))
+    print( 'If you are SURE this is what you want, enter "DELETE MY FILES" at the prompt' )
+    print( 'All upper-case, without the quotes.' )
+    print( 'Are you sure?' )
+    Res = input()
+
+    if Res == 'DELETE MY FILES':
+        print( "Okay!  Proceeding with %.2f%% chance of deleting each input file."%(100*prob) )
+        return()
+    else:
+        print( 'You did not enter "DELETE MY FILES", all upper-case, with no quotes.')
+        print( 'Aborting program.' )
+        quit()
+
+def delete_file_with_probability( delete_path, check_path ):
+    prob = betaconfig.input_delete_probability
+    if prob == 0:
+        return('')
+
+    if not os.path.exists( check_path ) or os.path.getsize( check_path ) < 1000:
+        return( ' (Original NOT DELETED - censored version NOT FOUND)' )
+
+    random_number = random.random()
+    if random_number < prob:
+        os.remove( delete_path )
+        return( ' (Original DELETED!!!!)' )
+    else:
+        return( ' (Original not deleted)' )

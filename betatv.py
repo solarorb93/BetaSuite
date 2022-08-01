@@ -13,6 +13,8 @@ import betautils_model as bu_model
 import betautils_video as bu_video
 import betautils_censor as bu_censor
 
+bu_config.verify_input_delete_probability()
+
 cap = cv2.VideoCapture()
 
 censor_hash = bu_hash.get_censor_hash()
@@ -33,8 +35,8 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
     print( "Processing %s"%(root) )
 
     for fidx, fname in enumerate(f_names):
-        #try:
-        if 1==1:
+        try:
+        #if 1==1:
             (stem, suffix ) = os.path.splitext(fname)
 
             uncensored_path = os.path.join( root, fname )
@@ -141,6 +143,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
 
                     proc.stdin.close()
                     proc.wait()
+                    cap.release()
 
                     print( "encoding complete, re-encoding to final output.........." );
                     has_audio = bu_video.video_file_has_audio( uncensored_path )
@@ -177,13 +180,16 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                     proc2.wait()
                     os.remove( censored_avi )
 
+                    delete_res = bu_config.delete_file_with_probability( uncensored_path, censored_path )
+                    print( delete_res )
+
                 else:
                     print( "--- Skipping  %d/%d (exists): %s"%(fidx+1, len(f_names), fname ) )
 
             else:
                 print( "--- Skipping  %d/%d (not video): %s"%(fidx+1, len(f_names), fname ) )
-        #except BaseException as err:
-        if 1==0:
+        except BaseException as err:
+        #if 1==0:
             print( "--- Skipping  %d/%d (failed)  [----- ----- ----- -----: -----]: %s"%(fidx+1, len(f_names), fname ) )
             print( f"Error {err=}, {type(err)=}" )
             time.sleep( 1 )
