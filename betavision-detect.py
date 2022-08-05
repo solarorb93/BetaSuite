@@ -1,3 +1,4 @@
+import hashlib
 import numpy as np
 import time
 from multiprocessing import shared_memory
@@ -44,17 +45,46 @@ for size in betaconfig.picture_sizes:
     local_screenshots.append( np.ndarray( ( this_height, this_width, 3 ), dtype=np.float32 ) )
 
 last_timestamp = 0
+image_sum = 0
+image_hash = 0
 while( True ):
-    start_ts = time.perf_counter()
+    times = [ time.perf_counter() ]
     # wait for screenshot to be ready
     while( in_timestamp1[0] != in_timestamp2[0] or in_timestamp1[0] == last_timestamp ):
         True
+
+    times.append( time.perf_counter() )
 
     last_timestamp = in_timestamp1[0]
     for i,local in enumerate(local_screenshots):
         local[:] = raw_screenshots[i][:]
 
-    ( local_out_0, local_out_1, local_out_2 ) = bu_model.get_raw_model_output( local_screenshots, session )
+    times.append( time.perf_counter() )
+
+    ### we don't want to censor again if image is unchanged
+    ### hashing at size 1280 takes 30ms, which is not nothing
+    ### summing takes 10ms, which is a lot less overhead.
+    ### so start with a very fast check (just sum the image)
+    ### if the sum is unchanged, proceed to hash
+    ### this means we will Detect the same image twice in a
+    ### row, but not more than twice
+    new_sum = np.sum( local_screenshots[0] )
+    times.append( time.perf_counter() )
+
+    if new_sum == image_sum:
+        new_hash = hashlib.md5( local_screenshots[0].tobytes() ).digest()
+    else:
+        new_hash = 0
+
+    times.append( time.perf_counter() )
+
+    if new_sum != image_sum or new_hash != image_hash:
+        ( local_out_0, local_out_1, local_out_2 ) = bu_model.get_raw_model_output( local_screenshots, session )
+
+    times.append( time.perf_counter() )
+
+    image_sum = new_sum
+    image_hash = new_hash
 
     out_timestamp1[0] = last_timestamp
     remote_out_0[:]=local_out_0[:]
@@ -62,7 +92,8 @@ while( True ):
     remote_out_2[:]=local_out_2[:]
     out_timestamp2[0] = last_timestamp
 
-    print( '%.3f'%(time.perf_counter()-start_ts ) )
+    times.append( time.perf_counter() )
+    print( [ '%.3f'%(x-times[0]) for x in times ] )
 
 
 

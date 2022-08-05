@@ -77,7 +77,7 @@ default_censor_style = [ 'bar', (247,154,192) ] # second item is the color of th
 #default_censor_style = [ 'pixel', 40 ] # second item is the how much to pixelate.  Higher is more censored.  10 means that a 200x400 pixel region is pixelated to 20x40 pixels.
 
 # min_prob: how confident are we that the item is identified before blocking
-default_min_prob = 0.60 #0.50 means 50% certainty
+default_min_prob = 0.45 #0.50 means 50% certainty
 
 # area_safety: do we want to censor a safety region around the identified region
 # note that in the overrides below, this can be set independently for width and height
