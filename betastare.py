@@ -50,6 +50,8 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
                 image_hash = hashlib.md5(image).hexdigest()[16:]
 
                 censored_path = os.path.join( censored_folder, '%s-%s-%s-%s-%.3f%s'%(stem, image_hash, censor_hash, "+".join(map(str,betaconfig.picture_sizes)), betaconst.global_min_prob, suffix))
+                if suffix not in betaconst.imwrite_extensions:
+                    censored_path = censored_path + ".png"
 
                 t1 = time.perf_counter() 
                 if( not os.path.exists( censored_path ) ):

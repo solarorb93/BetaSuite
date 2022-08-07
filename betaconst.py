@@ -45,3 +45,25 @@ bv_detect_timestamp2_name = 'bv_detects_timestamp2_name'
 bv_detect_shm_0_name = "bv_detect_shm_0_name"
 bv_detect_shm_1_name = "bv_detect_shm_1_name"
 bv_detect_shm_2_name = "bv_detect_shm_2_name"
+
+imwrite_extensions = [
+        'bmp',
+        'dib',
+        'jpeg',
+        'jpg',
+        'jpe',
+        'jp2',
+        'png',
+        'webp',
+        'pbm',
+        'pgm',
+        'pxm',
+        'pnm',
+        'sr',
+        'ras',
+        'tiff',
+        'tif',
+        'exr',
+        'hdr',
+        'pic',
+]
