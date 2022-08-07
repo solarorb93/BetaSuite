@@ -5,26 +5,25 @@ import numpy as np
 import betautils_config as bu_config
 
 import betaconst
-import betaconfig
 
-def censor_scale_for_image_box( image, feature_w, feature_h ):
-    if betaconfig.censor_scale_strategy == 'none':
+def censor_scale_for_image_box( censor_scale_strategy, image, feature_w, feature_h ):
+    if censor_scale_strategy == 'none':
         return(1)
-    if betaconfig.censor_scale_strategy == 'feature':
+    if censor_scale_strategy == 'feature':
         return( min( feature_w, feature_h ) / 100 )
-    if betaconfig.censor_scale_strategy == 'image':
+    if censor_scale_strategy == 'image':
         (img_h,img_w,_) = image.shape
         return( max( img_h, img_w ) / 1000 )
 
-def pixelate_image( image, x, y, w, h, factor ): # factor 10 means 100x100 area becomes 10x10
-    factor *= censor_scale_for_image_box( image, w, h )
+def pixelate_image( censor_scale_strategy, image, x, y, w, h, factor ): # factor 10 means 100x100 area becomes 10x10
+    factor *= censor_scale_for_image_box( censor_scale_strategy, image, w, h )
     new_w = math.ceil(w/factor)
     new_h = math.ceil(h/factor)
     image[y:y+h,x:x+w] = cv2.resize( cv2.resize( image[y:y+h,x:x+w], (new_w, new_h), interpolation = cv2.BORDER_DEFAULT ), (w,h), interpolation = cv2.INTER_NEAREST ) 
     return( image )
 
-def blur_image( image, x, y, w, h, factor ):
-    factor = 2*math.ceil( factor * censor_scale_for_image_box( image, w, h )/2 ) + 1
+def blur_image( censor_scale_strategy, image, x, y, w, h, factor ):
+    factor = 2*math.ceil( factor * censor_scale_for_image_box( censor_scale_strategy, image, w, h )/2 ) + 1
     image[y:y+h,x:x+w] = cv2.blur( image[y:y+h,x:x+w], (factor, factor), cv2.BORDER_DEFAULT )
     #image[y:y+h,x:x+w] = cv2.GaussianBlur( image[y:y+h,x:x+w], (factor, factor), 0 )
     return( image )
@@ -49,18 +48,18 @@ def debug_image( image, box ):
     image = cv2.putText( image, '%.2f %.1f %.1f'%(box['score'],box['start'],box['end'] ), (x+10, y+80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1 )
     return( image )
 
-def censor_image( image, box ):
+def censor_image( censor_scale_strategy, image, box ):
     if 'blur' == box['censor_style'][0]:
-        return( blur_image( image, box['x'], box['y'], box['w'], box['h'], box['censor_style'][1] ) )
+        return( blur_image( censor_scale_strategy, image, box['x'], box['y'], box['w'], box['h'], box['censor_style'][1] ) )
     if 'pixel' == box['censor_style'][0]:
-        return( pixelate_image( image, box['x'], box['y'], box['w'], box['h'], box['censor_style'][1] ) )
+        return( pixelate_image( censor_scale_strategy, image, box['x'], box['y'], box['w'], box['h'], box['censor_style'][1] ) )
     if 'bar' == box['censor_style'][0]:
         return( bar_image( image, box['x'], box['y'], box['w'], box['h'], box['censor_style'][1] ) )
     if 'debug' == box['censor_style'][0]:
         return( debug_image( image, box ) )
 
-def watermark_image( image ):
-    if betaconfig.enable_betasuite_watermark:
+def watermark_image( config_dict, image ):
+    if config_dict['censor']['enable_betasuite_watermark']:
         image = np.ascontiguousarray( image )
         (h,w,_) = image.shape
         scale = max( min(w/750,h/750), 1 )
@@ -72,8 +71,8 @@ def annotate_image_shape( image ):
     image = np.ascontiguousarray( image )
     return( cv2.putText( image, str( image.shape ), (20,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2 ) )
 
-def process_raw_box( raw, vid_w, vid_h ):
-    parts_to_blur = bu_config.get_parts_to_blur()
+def process_raw_box( config_dict, raw, vid_w, vid_h ):
+    parts_to_blur = bu_config.get_parts_to_blur( config_dict )
     label = betaconst.classes[int(raw['class_id'])][0]
     if label in parts_to_blur and raw['score'] > parts_to_blur[label]['min_prob']:
         x_area_safety = parts_to_blur[label]['width_area_safety']
@@ -120,9 +119,9 @@ def censor_style_sort( censor_style ):
     if censor_style[0] == 'debug':
         return( 99 )
             
-def collapse_boxes_for_style( piece ):
+def collapse_boxes_for_style( config_dict, piece ):
     style = piece[0]['censor_style'][0]
-    strategy = betaconfig.censor_overlap_strategy[style]
+    strategy = config_dict['censor']['censor_overlap_strategy'][style]
     if strategy == 'none':
         return( piece )
     
@@ -147,7 +146,7 @@ def collapse_boxes_for_style( piece ):
 
     return( segments )
 
-def censor_img_for_boxes( image, boxes ):
+def censor_img_for_boxes( config_dict, image, boxes ):
     boxes.sort( key=lambda x: ( x['label'], censor_style_sort(x['censor_style']) ) )
     pieces = []
     for box in boxes:
@@ -157,11 +156,11 @@ def censor_img_for_boxes( image, boxes ):
             pieces.append([box])
 
     for piece in pieces:
-        collapsed_boxes = collapse_boxes_for_style( piece )
+        collapsed_boxes = collapse_boxes_for_style( config_dict, piece )
         for collapsed_box in collapsed_boxes:
-            image = censor_image( image, collapsed_box )
+            image = censor_image( config_dict['censor']['censor_scale_strategy'], image, collapsed_box )
 
-    image = watermark_image( image )
+    image = watermark_image( config_dict, image )
 
     return( image )
 

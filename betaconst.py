@@ -37,6 +37,25 @@ classes = [
     [ 'exposed_penis',    (240, 230, 140), ], #khaki
 ]
 
+label_display_order = [
+    'exposed_anus',
+    'exposed_vulva',
+    'exposed_breast',
+    'exposed_buttocks',
+    'covered_vulva',
+    'covered_breast',
+    'covered_buttocks',
+    'face_femme',
+    'exposed_belly',
+    'covered_belly',
+    'exposed_feet',
+    'covered_feet',
+    'exposed_armpits',
+    'exposed_penis',
+    'exposed_chest',
+    'face_masc',
+]
+
 bv_ss_timestamp1_name = 'bv_ss_timestamp1_name'
 bv_ss_timestamp2_name = 'bv_ss_timestamp2_name'
 bv_detect_timestamp1_name = 'bv_detect_timestamp1_name'

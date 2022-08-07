@@ -5,7 +5,6 @@ import time
 import subprocess as sp
 
 import betaconst
-import betaconfig
 
 import betautils_hash as bu_hash
 import betautils_config as bu_config
@@ -13,14 +12,17 @@ import betautils_model as bu_model
 import betautils_video as bu_video
 import betautils_censor as bu_censor
 
-bu_config.verify_input_delete_probability()
+config_dict = bu_config.config_dict_from_config()
+input_delete_probability = config_dict['tv']['input_delete_probability']
+
+bu_config.verify_input_delete_probability( input_delete_probability )
 
 cap = cv2.VideoCapture()
 
-censor_hash = bu_hash.get_censor_hash()
-session = bu_model.get_session()
+censor_hash = bu_hash.get_censor_hash( config_dict )
+session = bu_model.get_session( config_dict )
 
-parts_to_blur = bu_config.get_parts_to_blur()
+parts_to_blur = bu_config.get_parts_to_blur( config_dict )
 
 images_to_censor = []
 images_to_detect = []
@@ -28,8 +30,8 @@ images_to_detect = []
 to_censor = []
 to_detect = []
 
-for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
-    censored_folder = root.replace( betaconst.video_path_uncensored, betaconst.video_path_censored, 1 )
+for root,d_names,f_names in os.walk(config_dict['tv']['input_dir']):
+    censored_folder = root.replace( config_dict['tv']['input_dir'], config_dict['tv']['output_dir'], 1 )
     os.makedirs( censored_folder, exist_ok=True )
 
     print( "Processing %s"%(root) )
@@ -45,8 +47,8 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
             if cap.isOpened():
                 file_hash = bu_hash.md5_for_file( uncensored_path, 16 );
 
-                censored_path = os.path.join( censored_folder, '%s-%s-%s-%s-%d-%.3f%s'%(stem, file_hash, censor_hash, "+".join(map(str,betaconfig.picture_sizes)), betaconfig.video_censor_fps, betaconst.global_min_prob, ".mp4"))
-                censored_avi  = os.path.join( censored_folder, '%s-%s-%s-%s-%d-%.3f%s'%(stem, file_hash, censor_hash, "+".join(map(str,betaconfig.picture_sizes)), betaconfig.video_censor_fps, betaconst.global_min_prob, ".avi"))
+                censored_path = os.path.join( censored_folder, '%s-%s-%s-%s-%d-%.3f%s'%(stem, file_hash, censor_hash, "+".join(map(str,config_dict['net']['picture_sizes'])), config_dict['tv']['video_censor_fps'], betaconst.global_min_prob, ".mp4"))
+                censored_avi  = os.path.join( censored_folder, '%s-%s-%s-%s-%d-%.3f%s'%(stem, file_hash, censor_hash, "+".join(map(str,config_dict['net']['picture_sizes'])), config_dict['tv']['video_censor_fps'], betaconst.global_min_prob, ".avi"))
 
                 t1 = time.perf_counter() 
                 if( not os.path.exists( censored_path ) ):
@@ -57,8 +59,8 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                     num_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT )
 
                     all_raw_boxes = []
-                    for size in betaconfig.picture_sizes:
-                        box_hash_path = '../vid_hashes/%s-%s-%d-%d-%.3f.gz'%(file_hash,betaconst.picture_saved_box_version, size, betaconfig.video_censor_fps, betaconst.global_min_prob)
+                    for size in config_dict['net']['picture_sizes']:
+                        box_hash_path = '../vid_hashes/%s-%s-%d-%d-%.3f.gz'%(file_hash,betaconst.picture_saved_box_version, size, config_dict['tv']['video_censor_fps'], betaconst.global_min_prob)
 
                         if( os.path.exists( box_hash_path ) ):
                             all_raw_boxes.append( bu_hash.read_json( box_hash_path ) )
@@ -78,7 +80,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 raw_boxes.extend( this_raw_boxes )
 
                                 i += 1
-                                t_pos = i / betaconfig.video_censor_fps
+                                t_pos = i / config_dict['tv']['video_censor_fps']
                                 new_frame = math.floor( t_pos * vid_fps )
                                 if new_frame >= num_frames:
                                     break
@@ -91,13 +93,13 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                     boxes = [];
                     for raw_boxes in all_raw_boxes:
                         for raw in raw_boxes:
-                            res = bu_censor.process_raw_box( raw, vid_w, vid_h )
+                            res = bu_censor.process_raw_box( config_dict, raw, vid_w, vid_h )
                             if res:
                                 boxes.append( res )
 
                     boxes.sort( key = lambda x: x['start'] )
 
-                    if betaconfig.debug_mode&1:
+                    if config_dict['censor']['debug']&1:
                         command_base = [ '../ffmpeg/bin/ffmpeg.exe', '-y' ]
                     else:
                         command_base = [ '../ffmpeg/bin/ffmpeg.exe', '-y', '-loglevel', 'error' ]
@@ -115,7 +117,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                             censored_avi
                     ]
 
-                    if betaconfig.debug_mode&1:
+                    if config_dict['censor']['debug']&1:
                         print( command )
                     proc = sp.Popen(command, stdin=sp.PIPE )
 
@@ -135,7 +137,7 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                         while len( boxes ) and boxes[0]['start'] <= curr_time:
                             live_boxes.append( boxes.pop(0) )
 
-                        frame = bu_censor.censor_img_for_boxes( frame, live_boxes )
+                        frame = bu_censor.censor_img_for_boxes( config_dict, frame, live_boxes )
 
                         proc.stdin.write(frame.tobytes())
                         i+=1
@@ -174,13 +176,13 @@ for root,d_names,f_names in os.walk(betaconst.video_path_uncensored):
                                 censored_path
                         ]
 
-                    if betaconfig.debug_mode&1:
+                    if config_dict['censor']['debug']&1:
                         print( command )
                     proc2 = sp.Popen( command ) 
                     proc2.wait()
                     os.remove( censored_avi )
 
-                    delete_res = bu_config.delete_file_with_probability( uncensored_path, censored_path )
+                    delete_res = bu_config.delete_file_with_probability( input_delete_probability, uncensored_path, censored_path )
                     print( delete_res )
 
                 else:

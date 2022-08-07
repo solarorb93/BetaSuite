@@ -4,12 +4,14 @@ import time
 from multiprocessing import shared_memory
 
 import betaconst
-import betaconfig
 
+import betautils_config as bu_config
 import betautils_vision as bu_vision
 import betautils_model as bu_model
 
-session = bu_model.get_session()
+config_dict = bu_config.config_dict_from_config()
+
+session = bu_model.get_session( config_dict )
 
 in_timestamp1_shm = shared_memory.SharedMemory( name=betaconst.bv_ss_timestamp1_name )
 in_timestamp2_shm = shared_memory.SharedMemory( name=betaconst.bv_ss_timestamp2_name )
@@ -23,9 +25,9 @@ out_shm_timestamp2 = shared_memory.SharedMemory( name=betaconst.bv_detect_timest
 out_timestamp1 = np.ndarray( (1,), dtype=np.float64, buffer = out_shm_timestamp1.buf )
 out_timestamp2 = np.ndarray( (1,), dtype=np.float64, buffer = out_shm_timestamp2.buf )
 
-local_out_0 = np.ndarray( ( len( betaconfig.picture_sizes ), 300, 4 ), dtype=np.float32 )
-local_out_1 = np.ndarray( ( len( betaconfig.picture_sizes ), 300 ), dtype=np.float32 )
-local_out_2 = np.ndarray( ( len( betaconfig.picture_sizes ), 300 ), dtype=np.int32 )
+local_out_0 = np.ndarray( ( len( config_dict['net']['picture_sizes'] ), 300, 4 ), dtype=np.float32 )
+local_out_1 = np.ndarray( ( len( config_dict['net']['picture_sizes'] ), 300 ), dtype=np.float32 )
+local_out_2 = np.ndarray( ( len( config_dict['net']['picture_sizes'] ), 300 ), dtype=np.int32 )
 
 out_shm_0 = shared_memory.SharedMemory( name=betaconst.bv_detect_shm_0_name, create=True, size=local_out_0.nbytes )
 out_shm_1 = shared_memory.SharedMemory( name=betaconst.bv_detect_shm_1_name, create=True, size=local_out_1.nbytes )
@@ -38,7 +40,7 @@ remote_out_2 = np.ndarray( local_out_2.shape, local_out_2.dtype, buffer = out_sh
 raw_shms = []
 raw_screenshots = []
 local_screenshots = []
-for size in betaconfig.picture_sizes:
+for size in config_dict['net']['picture_sizes']:
     raw_shms.append( shared_memory.SharedMemory( name=bu_vision.shm_name_for_screenshot( size ) ) )
     (this_height, this_width) = bu_vision.vision_adj_img_size( size )
     raw_screenshots.append( np.ndarray( ( this_height, this_width, 3 ), dtype=np.float32, buffer = raw_shms[-1].buf ) )

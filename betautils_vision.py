@@ -2,15 +2,13 @@ import cv2
 import numpy as np
 import time
 
-import betaconfig
-
-def get_screenshot( sct ):
+def get_screenshot( config_dict, sct ):
     monitor = {
-            'left': betaconfig.vision_cap_left,
-            'top': betaconfig.vision_cap_top,
-            'width': betaconfig.vision_cap_width,
-            'height': betaconfig.vision_cap_height,
-            'mon': betaconfig.vision_cap_monitor,
+            'left':   config_dict['vision']['vision_cap_left'   ],
+            'top':    config_dict['vision']['vision_cap_top'    ],
+            'width':  config_dict['vision']['vision_cap_width'  ],
+            'height': config_dict['vision']['vision_cap_height' ],
+            'mon':    config_dict['vision']['vision_cap_monitor'],
     }
 
     sct_time = time.monotonic()
@@ -37,4 +35,4 @@ def vision_adj_img_size( max_length ):
     if max_length != 0:
         return( ( max_length, max_length ) )
     else:
-        return( ( betaconfig.vision_cap_height, betaconfig.vision_cap_width ) )
+        return( ( config_dict['vision']['vision_cap_height'], config_dict['vision']['vision_cap_width'] ) )

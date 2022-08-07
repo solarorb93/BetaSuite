@@ -5,7 +5,7 @@
 #### If you have not, set this to 0.
 #### Only BetaStare and BetaTV are supported with gpu_enabled = 0, 
 #### BetaVision is only supported with gpu_enabled=1.
-gpu_enabled=0
+gpu_enabled=1
 
 ###################################################################
 #### Neural Net input size.  This controls how the net views the image.
@@ -71,8 +71,8 @@ items_to_censor = [
 # censor style: whether the default censor should be black bars, pixelate, or blur.  Uncomment
 # one of the below (by removing the #).
 # you can override these per item below in Item Overrides
-#default_censor_style = [ 'bar', (0,0,0) ] # second item is the color of the bar, in RGB code 
-default_censor_style = [ 'bar', (247,154,192) ] # second item is the color of the bar, in RGB code 
+default_censor_style = [ 'bar', (0,0,0) ] # second item is the color of the bar, in RGB code 
+#default_censor_style = [ 'bar', (247,154,192) ] # second item is the color of the bar, in RGB code 
 #default_censor_style = [ 'blur', 50 ] # second item is how aggressive a blur.  20 is a reasonable number.  Higher is more blurry.
 #default_censor_style = [ 'pixel', 40 ] # second item is the how much to pixelate.  Higher is more censored.  10 means that a 200x400 pixel region is pixelated to 20x40 pixels.
 

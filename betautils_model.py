@@ -3,12 +3,11 @@ import math
 import numpy as np
 import onnxruntime
 
-import betaconfig
 import betaconst
 
-def get_session():
-    if betaconfig.gpu_enabled:
-        providers = [ ( 'CUDAExecutionProvider', { 'device_id': betaconfig.cuda_device_id } ) ]
+def get_session(config_dict):
+    if config_dict['net']['gpu_enabled']:
+        providers = [ ( 'CUDAExecutionProvider', { 'device_id': config_dict['net']['cuda_device_id'] } ) ]
     else:
         providers = [ ( 'CPUExecutionProvider', {} ) ]
 

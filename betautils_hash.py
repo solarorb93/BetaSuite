@@ -5,21 +5,18 @@ import json
 import betautils_config as bu_config
 
 import betaconst
-import betaconfig
 
 def dictionary_hash( to_hash, hash_len ):
     dict_hash = hashlib.md5(json.dumps( to_hash, sort_keys=True, ensure_ascii=True).encode('utf-8')).hexdigest()
     return( dict_hash[:hash_len] )
 
-def get_censor_hash():
-    parts_to_blur = bu_config.get_parts_to_blur()
+def get_censor_hash( config_dict ):
     hash_dict = {
-            'parts_to_blur': parts_to_blur,
-            'picture_sizes': betaconfig.picture_sizes,
-            'censor_overlap_strategy': betaconfig.censor_overlap_strategy,
-            'censor_scale_strategy': betaconfig.censor_scale_strategy,
-            'enable_betasuite_watermark': betaconfig.enable_betasuite_watermark,
-            }
+            'censor': config_dict['censor'],
+            'items':  config_dict['items' ],
+            'picture_sizes': config_dict['net']['picture_sizes']
+    }
+
     ptb_hash = dictionary_hash( hash_dict, betaconst.ptb_hash_len )
     return( ptb_hash )
 
