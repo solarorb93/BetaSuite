@@ -7,17 +7,17 @@ BetaSuite is composed of the following programs
 - BetaTV: this is a program that auto-censors video files.
 - BetaVision: this is a program that performs real-time censoring of your screen.
 
-These are the installation guidelines for BetaSuite v0.2.3.
+These are the installation guidelines for BetaSuite v0.2.4.
 
 ## Upgrading from previous BetaSuite
 If you have not installed BetaSuite before, ignore this section.
 
-If you are upgrading from v0.1.1 or later, you can just redownload BetaSuite, unzip it into InstallFolder/BetaSuite-0.2.3, update betaconfig.py with your settings, and read the section on BetaVision.
+If you are upgrading from v0.1.1 or later, you can just redownload BetaSuite, unzip it into InstallFolder/BetaSuite-0.2.4, update betaconfig.py with your settings, and read the section on BetaVision.
 
 If you are upgrading from v0.0.1, you have to do the following steps:
 - Delete the ffmpeg you downloaded and download it again.  I'm sorry, I had you download the wrong version.  You need the -gpl version, not the -lgpl version.  You can follow the instructions in the ffmpeg section in this document.
 - Create uncensored_vids, censored_vids, and vid_hashes folders in /InstallFolder/, just like you did uncensored_pics, etc.
-- Complete the Download BetaSuite section below to download v0.2.3.
+- Complete the Download BetaSuite section below to download v0.2.4.
 - Whatever changes you made to the betaconfig file, make them again in the new betaconfig file
 - Read the section on Testing BetaTV to Censor Videos to learn how to use BetaTV, and read the Configuring BetaSuite section to learn about the new config options, and the section on BetaVision to learn to use BetaVision.
 
@@ -34,10 +34,12 @@ If you are upgrading from v0.0.1, you have to do the following steps:
 ## Installing Basic BetaSuite Dependencies
 Yes, you really have to do all these things.  
 1. Install Python 3.9
+    * FOLLOW THESE INSTRUCTIONS EXACTLY.  A huge portion of user issues come from not following these exactly.  And these errors often show up much later in the section about activitating GPU Acceleration.  DO NOT install from the Windows store.  DO NOT use whatever old version of python you have installed from a previous project.  DO NOT forget to click the "Add to PATH" option in the installer.  If you do any of these things, I promise, it will probably not work.
     * BetaSuite is written in Python.  You do not have to be a programmer to use BetaSuite, but you do need to install Python so that the BetaSuite code can run.
     * Right now, Python releases are at https://www.python.org/downloads/windows/.  You must download a version starting with 3.9.  Do not install 3.10 or any other version.  As of this writing, 3.9.13 is the most up to date version of 3.9.  You should install whatever the most up to date version is.
-    * When you install Python, make certain that you enable the option to add Python to your PATH variable.
+    * When you install Python, make certain that you enable the option to add Python to your PATH variable.  MAKE SURE YOU DO THIS.  PLEASE.  
     * To test that python is correctly installed, open a cmd window by going to Start->Run and entering `cmd` and then pressing enter. In the black window that appears, type `python` and then press enter.  You should see a prompt come up that says "Python 3.9" and give you a >>> prompt.  Type `quit()` and press enter to exit.  If you did not get a Python 3.9 prompt, you did not install Python correctly.
+    * If you still run into issues, one user has reported they had to install python to C:\Program Files\Python39\ in the installer.  We don't know why, and no-one else has had this issue, but if you still run into issues it can be a debugging tip!
 
 2. Install Python Packages
     * BetaSuite relies on a number of public packages for Python that must be installed.
@@ -71,11 +73,11 @@ Yes, you really have to do all these things.
     * Download the file and put it in InstallFolder/model/.  So you should have InstallFolder/model/detector_v2_default_checkpoint.onnx.
 
 6. Download BetaSuite
-    * Download BetaSuite v0.2.3 source code zip file from this link: https://github.com/solarorb93/BetaSuite/releases/tag/v0.2.3
-    * Unzip the files into InstallFolder/BetaSuite-0.2.3/ (so you should have a file InstallFolder/BetaSuite-0.2.3/betastare.py)
+    * Download BetaSuite v0.2.4 source code zip file from this link: https://github.com/solarorb93/BetaSuite/releases/tag/v0.2.4
+    * Unzip the files into InstallFolder/BetaSuite-0.2.4/ (so you should have a file InstallFolder/BetaSuite-0.2.4/betastare.py)
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `c:` where c is the letter of the drive that InstallFolder is located on
-        * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
+        * `cd InstallFolder/BetaSuite-0.2.4/` where InstallFolder is your InstallFolder
         * `python betatest.py`
     * If anything is printed out after the final command, something is incorrect with your setup steps.
 
@@ -83,7 +85,7 @@ Yes, you really have to do all these things.
 * Take one image you want to censor and copy it to InstallFolder/uncensored_pics
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.4/` where InstallFolder is your InstallFolder
     * `python betastare.py`
 * You should now see a censored version of the image in InstallFolder/censored_pics
 
@@ -104,23 +106,24 @@ This section is only for users with a modern NVidia graphics card.  If you do no
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `pip uninstall onnxruntime`
     * `pip install onnxruntime-gpu`
-* Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=0 to `gpu_enabled=1`.
+* Navigate to InstallFolder/BetaSuite-0.2.4/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=0 to `gpu_enabled=1`.
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.4/` where InstallFolder is your InstallFolder
     * `python betatest.py`
 * If anything is printed out after the final command, something is incorrect with your setup steps.
+* If you get a message about zlibwapi.dll missing when running betatest.py, step 3.1.3 in this guide may fix it: https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html#install-zlib-windows
 * If for any reason you cannot make GPU Acceleration work, you need to go back to the original CPU-only setup, by doing the following steps
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `pip uninstall onnxruntime-gpu`
         * `pip install onnxruntime`
-    * Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=1 to `gpu_enabled=0`. Then save and close the file.
+    * Navigate to InstallFolder/BetaSuite-0.2.4/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.  In the first section of the file, change gpu_enabled=1 to `gpu_enabled=0`. Then save and close the file.
 
 ## Testing BetaTV to Censor Videos
 * Take one video you want to censor and copy it to InstallFolder/uncensored_vids.  I recommend a short video (less than a minute).
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.4/` where InstallFolder is your InstallFolder
     * `python betatv.py` 
 * There are three steps that will happen, from slowest to fastest
     * NudeNet detection will run on the video ("processing")
@@ -134,22 +137,22 @@ BetaVision will almost certainly not work well if you do not have GPU Accelerati
 BetaVision uses three scripts to function.  The scripts must be started in the correct order.
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.4/` where InstallFolder is your InstallFolder
     * `python betavision-screenshot.py` which will start the first process.  The program will output numbers that represent how long BetaVision is taking to capture uncensored content, which should usually be under 0.100 (100 milliseconds).
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.4/` where InstallFolder is your InstallFolder
     * `python betavision-detect.py` which will start the second process.  The program will output numbers that represent how long BetaVision is taking to detect features to censor, which should usually be under 0.250 (250 milliseconds).
 * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
     * `c:` where c is the letter of the drive that InstallFolder is located on
-    * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
+    * `cd InstallFolder/BetaSuite-0.2.4/` where InstallFolder is your InstallFolder
     * `python betavision-censor.py` which will start the third process.  The program will output numbers that represent how long BetaVision is taking to censor the content.  The final number should usualy be under 0.080 (80 milliseconds), and hopefully under 0.050.  
 When you run the final command, a window will open that has a copy of the content in the left half of your screen.  If you put censorable content in that part of the screen, it will appear censored in near-real-time (with a 500ms delay, by default).  Sounds will be out-of-sync; a later version of this guide will document how to install VoiceMeeter to sync the sound.
 To further configure BetaVision (including what part of the screen is censored), see the Configuring BetaSuite section below.
 
 ## Configuring BetaSuite
-You can adjust how the censoring works by modifying InstallFolder/BetaSuite-0.2.3/betaconfig.py.  
-Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.
+You can adjust how the censoring works by modifying InstallFolder/BetaSuite-0.2.4/betaconfig.py.  
+Navigate to InstallFolder/BetaSuite-0.2.4/ and open betaconfig.py in Notepad by right-clicking on it, hovering over "Open With", and choosing Notepad.
 * `gpu_enabled`: this was covered in the "Setting Up GPU Acceleration" section above
 * `picture_sizes`: You can experiment with different values to get slightly different censoring.  In general, `[1280]` is recommended, with `[640]` being faster but less accurate and `[2560]` being slower and better for collages or group photos.  You can also combine settings to censor images in multiple passes by having two numbers, like `[1280, 2560]`, which will be slower.  You can also specify `[0]` as a size, which means the full size image or video will be passed to NudeNet.  This is generally not recommended and will usually be slower, but you can experiment with it.
 * `video_censor_fps`: for BetaTV, this determines how many frames are run through NudeNet.  Analyzing every frame is very slow.  Instead, BetaTV analyzes a portion of the frames and assumes the features don't move too much between frames.  I use `15`.  All the way down to `5` is reasonable.  Higher number is more accurate, lower number is faster.
@@ -157,7 +160,7 @@ Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by 
     * Note that these steps might not give the right values if you use display Scaling.  To see if you do, right-click on your desktop and choose Display Settings.  If "Change the size of text, apps, and other items" under "Scale and layout" is not 100%, you may not get the correct values here and may need to experiment a bit.  A fix for Scaling will be in a later BetaSuite.
     * Open a cmd window by going to Start->Run and entering `cmd` and then pressing enter.  In the black window that appears, type the following commands, pressing enter after each one:
         * `c:` where c is the letter of the drive that InstallFolder is located on
-        * `cd InstallFolder/BetaSuite-0.2.3/` where InstallFolder is your InstallFolder
+        * `cd InstallFolder/BetaSuite-0.2.4/` where InstallFolder is your InstallFolder
         * `python betavision-coordinates.py` 
     * Put your mouse in the upper-left corner of the region you want to censor.  The window will show the x- and y-coordinates of that spot.  Enter the x coordinate as vision_cap_left and the y-coordinate as vision_cap_top.  Note that these could be negative.
     * Put your mouse in the bottom-right corner of the region you want to censor.  The window will show the x- and y-coordinates of that spot.  Subtract the original coordinates to get the value of vision_cap_width (new x-coordinate minus old x-coordinate) and vision_cap_height (new y-coordinate minus old y-coordinate).
@@ -203,6 +206,10 @@ Navigate to InstallFolder/BetaSuite-0.2.3/ and open betaconfig.py in Notepad by 
 * If you are having problems with boxes not appearing to be in the right place or censoring not applied correctly, you can set debug_mode in the config file to try to see what's going on.
 
 ## Changelog
+* v0.2.4: 2022-08-06
+    * Added a bunch of troubleshooting info from testers, thanks testers!
+    * Added feature to not re-run detection if the image hasn't changed, leads to significant performance and power usage improvements
+    * Bumped default_min_prob down to 0.45 by default, 0.6 is really just too high, not sure why it was set to that.
 * v0.2.3: 2022-08-01
     * Fixed min_prob, which was broken (thank you to teasey who found the bug!)
     * Added BetaSuite watermark, which can be turned on and off in config
