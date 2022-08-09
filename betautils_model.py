@@ -12,7 +12,8 @@ def get_session():
     else:
         providers = [ ( 'CPUExecutionProvider', {} ) ]
 
-    session = onnxruntime.InferenceSession( '../model/detector_v2_default_checkpoint.onnx', providers=providers )
+    session = onnxruntime.InferenceSession( '../model/detect_v2_default_checkpoint_static_640.onnx', providers=providers )
+    #session = onnxruntime.InferenceSession( '../model/detector_v2_default_checkpoint.onnx', providers=providers )
     return( session )
 
 def get_resize_scale( img_h, img_w, max_length ):
@@ -32,8 +33,9 @@ def prep_img_for_nn( raw_img, size, scale ):
         (h,w,_) = adj_img.shape
         adj_img = cv2.copyMakeBorder( adj_img, 0, size - h, 0, size - w, cv2.BORDER_CONSTANT, value=0 )
 
-    adj_img = adj_img.astype(np.float32)
-    adj_img -= [103.939, 116.779, 123.68 ]
+    adj_img -= np.array([104, 117, 124 ]).astype( np.uint8 )
+    #adj_img = adj_img.astype(np.float32)
+    #adj_img -= [103.939, 116.779, 123.68 ]
     return( adj_img )
 
 def get_raw_model_output( img_array, session ):

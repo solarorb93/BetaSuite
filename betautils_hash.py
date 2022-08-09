@@ -19,6 +19,7 @@ def get_censor_hash():
             'censor_overlap_strategy': betaconfig.censor_overlap_strategy,
             'censor_scale_strategy': betaconfig.censor_scale_strategy,
             'enable_betasuite_watermark': betaconfig.enable_betasuite_watermark,
+            'adhoc': 3,
             }
     ptb_hash = dictionary_hash( hash_dict, betaconst.ptb_hash_len )
     return( ptb_hash )

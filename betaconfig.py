@@ -18,7 +18,7 @@ gpu_enabled=0
 #### [ 1280, 2560 ]: combine the two, may be safer than either alone
 ####
 #### [ 0 ]: not recommended, uses photos as-is to neural net.
-picture_sizes = [ 1280 ] 
+picture_sizes = [ 640 ] 
 
 ##################################################################
 #### BetaTV does not run the neural net on every single frame of a
@@ -154,7 +154,7 @@ betavision_interpolate = False
 vision_cursor_color = (168,93,253)
 
 ### Debug mode, if you are trying to solve issues
-debug_mode = 0
+debug_mode = 1
 #debug_mode = 1 # just show debug information
 #debug_mode = 3 # also save debug info to BetaSuite folder
 

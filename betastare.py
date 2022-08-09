@@ -39,7 +39,8 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
     for fname in f_names:
         fidx += 1
         t0 = time.perf_counter()
-        try:
+        #try:
+        if True:
             (stem, suffix ) = os.path.splitext(fname)
 
             uncensored_path = os.path.join( root, fname )
@@ -70,8 +71,8 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
                             all_raw_boxes.append( raw_boxes )
                             use_nn = True
 
-                    if betaconfig.debug_mode&1:
-                        print( all_raw_boxes )
+                    #if betaconfig.debug_mode&1:
+                    #    print( all_raw_boxes )
 
                     t2 = time.perf_counter()
                     boxes = []
@@ -96,7 +97,8 @@ for root,d_names,f_names in os.walk(betaconst.picture_path_uncensored):
 
             else:
                 print( "--- Skipping  %d/%d (not img) [----- ----- ----- -----: -----]: %s"%(fidx, num_files, fname ) )
-        except BaseException as err:
+        #except BaseException as err:
+        else:
             print( "--- Skipping  %d/%d (failed)  [----- ----- ----- -----: -----]: %s"%(fidx, num_files, fname ) )
             print( f"Error {err=}, {type(err)=}" )
             time.sleep( 1 )
