@@ -1,7 +1,8 @@
 import subprocess
+import betaconfig
 
 def video_file_has_audio( filepath ):
-    command = [ "../ffmpeg/bin/ffprobe.exe",
+    command = [ betaconfig.ffprobe_path,
             '-loglevel', 'error',
             '-show_entries', 'stream=index,codec_type',
             '-of', 'csv=p=0',

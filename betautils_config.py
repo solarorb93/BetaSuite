@@ -1,8 +1,23 @@
 import os
 import random
+import onnxruntime
 
 import betaconfig
 import betaconst
+
+
+def get_providers():
+    """Get provider. Best guess if not specified"""
+    if betaconfig.providers is not None:
+        return betaconfig.providers
+    available = onnxruntime.get_available_providers()
+    if "CUDAExecutionProvider" in available:
+        return [ ( 'CUDAExecutionProvider', { 'device_id':0 } ) ]  # CUDA GPU for NVIDIA cards
+    elif "ROCMExecutionProvider" in available:
+        return ["ROCMExecutionProvider", 'CPUExecutionProvider']  # AMD ROCm with CPU fallback
+    else:
+        return [ ( 'CPUExecutionProvider', {} ) ]  # CPU only
+
 
 def get_parts_to_blur():
     parts_to_blur={}

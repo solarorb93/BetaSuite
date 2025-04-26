@@ -64,7 +64,7 @@ def watermark_image( image ):
         image = np.ascontiguousarray( image )
         (h,w,_) = image.shape
         scale = max( min(w/750,h/750), 1 )
-        return( cv2.putText( image, 'Censored with betasuite.net', (20,math.ceil(20*scale)), cv2.FONT_HERSHEY_PLAIN, scale, (0,0,255), math.floor(scale) ) )
+        return( cv2.putText( image, 'Censored with github.com/anatoidea/BetaSuite', (20,math.ceil(20*scale)), cv2.FONT_HERSHEY_PLAIN, scale, (0,0,255), math.floor(scale) ) )
     else:
         return( image )
 

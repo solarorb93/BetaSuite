@@ -1,8 +1,23 @@
 import cv2
 import numpy as np
 import time
+import os
 
 import betaconfig
+
+
+if os.name == "nt":
+    import win32gui
+    def get_cursor_location():
+        flags, hcursor, (cx,cy) = win32gui.GetCursorInfo()
+        return cx, cy
+else:
+    from Xlib import display
+    def get_cursor_location():
+        cursor_data = display.Display().screen().root.query_pointer()._data
+        cx, cy = cursor_data["root_x"], cursor_data["root_y"]
+        return cx, cy
+
 
 def get_screenshot( sct ):
     monitor = {

@@ -1,11 +1,15 @@
 ###################################################################
 #### If you have completed the 'GPU Acceleration' Steps in the 
-#### BetaVision install guide, set this to 1, and it will
-#### very, very significantly speed up censoring.
-#### If you have not, set this to 0.
-#### Only BetaStare and BetaTV are supported with gpu_enabled = 0, 
-#### BetaVision is only supported with gpu_enabled=1.
-gpu_enabled=0
+#### BetaVision install guide, enable the GPU provider for your system
+#### and it will very, very significantly speed up censoring.
+#### If you have not, set this to the CPU only version
+#### Only BetaStare and BetaTV are supported with CPU, 
+#### BetaVision is only supported with GPUs enabled.
+#### Or leave this as None for an attempt at autodetection
+# providers = [ ( 'CPUExecutionProvider', {} ) ]  # CPU only
+# providers = [ ( 'CUDAExecutionProvider', { 'device_id':0 } ) ]  # CUDA GPU for NVIDIA cards
+# providers = ["ROCMExecutionProvider", 'CPUExecutionProvider']  # AMD ROCm with CPU fallback
+providers = None  # Autodetect
 
 ###################################################################
 #### Neural Net input size.  This controls how the net views the image.
@@ -120,10 +124,12 @@ input_delete_probability = 0
 ###################################################################
 #### Miscellaneous
 
-# If you have more than one graphics card and you care which one
-# runs the neural net, change this
-# You probably don't need to change this
-cuda_device_id = 0
+# Path to FFMPEG binaries. Use these first two on Windows if you followed the README instructions
+# ffmpeg_path = '../ffmpeg/bin/ffmpeg.exe'
+# ffprobe_path = '../ffmpeg/bin/ffprobe.exe'
+# Use these next two if you are on Linux or FFMPEG is in your system's path.
+ffmpeg_path = 'ffmpeg'
+ffprobe_path = 'ffprobe'
 
 # this determines how various censor styles deal with overlap
 # You probably don't need to change this
